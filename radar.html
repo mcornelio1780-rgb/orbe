@@ -1,0 +1,444 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>orbe radar</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 110'%3E%3Crect x='-10' y='-5' width='120' height='120' rx='26' fill='%230D1330'/%3E%3Cpath d='M44 98 C44 88 34 82 26 74 A34 34 0 1 1 76.05 71.86' fill='none' stroke='%23F2F4F8' stroke-width='10' stroke-linecap='round'/%3E%3Ccircle cx='62.74' cy='81.52' r='8' fill='%23FF5A1F'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --llama:#FF5A1F;--senal:#8FA8FF;
+  --bg:#070A1C;--panel:#0D1330;--panel2:#111A40;--fg:#F2F4F8;--muted:#A3A9C2;--dim:#6F7798;--line:#232A4D;--on:#1B2557;
+  --serif:"Fraunces",Georgia,serif;--sans:"Hanken Grotesk",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]){--bg:#F2F4F8;--panel:#FFFFFF;--panel2:#EEF1F7;--fg:#0D1330;--muted:#50566E;--dim:#7A8099;--line:#D9DEEA;--on:#FFE6DB;color-scheme:light}}
+:root[data-theme="light"]{--bg:#F2F4F8;--panel:#FFFFFF;--panel2:#EEF1F7;--fg:#0D1330;--muted:#50566E;--dim:#7A8099;--line:#D9DEEA;--on:#FFE6DB;color-scheme:light}
+*,*::before,*::after{box-sizing:inherit}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--sans);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--llama);outline-offset:2px;border-radius:6px}
+header{position:sticky;top:0;z-index:30;background:var(--bg);border-bottom:1px solid var(--line);padding-top:env(safe-area-inset-top,0px)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:40;background:var(--bg)}
+.bar{max-width:1320px;margin:0 auto;padding:0 20px;height:60px;display:flex;align-items:center;gap:14px}
+.logo{display:flex;align-items:center;gap:7px;font-family:var(--serif);font-weight:600;font-size:1.4rem;letter-spacing:-.03em;text-decoration:none;color:var(--fg)}
+.logo svg{height:1.15em;width:auto}
+.logo small{font-family:var(--sans);font-size:.8rem;font-weight:600;color:var(--muted);letter-spacing:0;margin-left:2px}
+.sp{flex:1}
+@media(max-width:480px){.bar{gap:8px;padding:0 12px}.seg button{padding:4px 7px}#homeLink{display:none}}
+.seg{display:flex;border:1px solid var(--line);border-radius:999px;padding:3px}
+.seg button{background:none;border:0;padding:4px 9px;border-radius:999px;font-size:.78rem;font-weight:700;color:var(--muted);cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--fg);color:var(--bg)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border-radius:999px;padding:9px 16px;font-weight:700;font-size:.88rem;border:1.5px solid var(--line);background:none;cursor:pointer;text-decoration:none;color:var(--fg)}
+.btn:hover{border-color:var(--fg)}
+.btn.primary{background:var(--llama);border-color:var(--llama);color:#0D1330}
+.icon{width:36px;height:36px;padding:0;border-radius:50%}
+.layout{max-width:1320px;margin:0 auto;padding:20px;display:grid;grid-template-columns:340px 1fr;gap:20px;align-items:start}
+@media(max-width:980px){.layout{grid-template-columns:1fr}}
+aside{position:sticky;top:80px;display:flex;flex-direction:column;gap:14px}
+@media(max-width:980px){aside{position:static}}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:18px}
+.price{font-family:var(--serif);font-size:2.6rem;font-weight:600;line-height:1}
+.price small{font-family:var(--sans);font-size:.85rem;color:var(--muted);font-weight:500}
+.era{color:var(--senal);font-size:.85rem;margin-top:4px;min-height:1.3em}
+input[type=range]{width:100%;accent-color:var(--llama);margin:14px 0 4px;height:26px}
+.ticks{display:flex;justify-content:space-between;font-size:.7rem;color:var(--dim)}
+.presets{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.presets button{background:var(--panel2);border:1px solid var(--line);border-radius:999px;padding:5px 10px;font-size:.76rem;cursor:pointer;color:var(--muted)}
+.presets button:hover{color:var(--fg)}
+.stat{display:flex;justify-content:space-between;align-items:baseline;padding:8px 0;border-bottom:1px solid var(--line)}
+.stat:last-child{border:0}
+.stat b{font-family:var(--serif);font-size:1.5rem;font-weight:600}
+.stat b.hot{color:var(--llama)}
+h2{font-family:var(--serif);font-weight:600;font-size:1.15rem;margin:0 0 8px;letter-spacing:-.01em}
+.lbl{font-size:.8rem;color:var(--muted);display:block;margin-bottom:4px}
+.field{width:100%;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:9px 11px}
+.row{display:flex;gap:8px}
+.muted{color:var(--muted)}
+.small{font-size:.8rem}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+.toolbar .field{width:auto;flex:1 1 200px}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chips button{background:none;border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-size:.8rem;cursor:pointer;color:var(--muted)}
+.chips button[aria-pressed="true"]{border-color:var(--fg);color:var(--fg);background:var(--panel2)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.case{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px;text-align:left;cursor:pointer;display:flex;flex-direction:column;gap:8px;position:relative;transition:border-color .2s,background .2s;min-height:150px}
+.case:hover{border-color:var(--dim)}
+.case.on{background:var(--on);border-color:var(--llama)}
+.case .top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.tag{font-size:.7rem;font-weight:700;color:var(--muted);background:var(--panel2);border-radius:999px;padding:3px 8px}
+.case.on .tag{background:rgba(255,90,31,.15);color:var(--llama)}
+.case h3{font-family:var(--serif);font-weight:600;font-size:1.12rem;line-height:1.15;margin:0}
+.case p{margin:0;font-size:.85rem;color:var(--muted)}
+.case .be{margin-top:auto;display:flex;justify-content:space-between;align-items:center;font-size:.82rem}
+.case .be b{font-size:.95rem}
+.meter{height:4px;background:var(--panel2);border-radius:4px;overflow:hidden;margin-top:4px}
+.meter span{display:block;height:100%;background:var(--llama);border-radius:4px}
+.case.locked h3,.case.locked p,.case.locked .be{filter:blur(5px);user-select:none}
+.lock{position:absolute;inset:0;display:grid;place-items:center;font-weight:700;font-size:.85rem;color:var(--fg)}
+.lock span{background:var(--panel2);border:1px solid var(--line);border-radius:999px;padding:7px 12px}
+.empty{padding:40px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:16px}
+/* drawer */
+dialog{border:0;padding:0;background:transparent;max-width:min(720px,94vw);width:100%;color:var(--fg)}
+dialog::backdrop{background:rgba(7,10,28,.7)}
+.sheet{background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:24px;max-height:88vh;overflow:auto}
+.sheet h2{font-size:1.6rem}
+.kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:16px 0}
+@media(max-width:560px){.kpis{grid-template-columns:1fr}}
+.kpi{background:var(--panel2);border-radius:14px;padding:12px}
+.kpi b{display:block;font-family:var(--serif);font-size:1.4rem;font-weight:600}
+.kpi.good b{color:#3DD68C}.kpi.bad b{color:#FF6B6B}
+.inputs{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:560px){.inputs{grid-template-columns:1fr}}
+.chart{margin-top:16px;background:var(--panel2);border-radius:14px;padding:12px;overflow-x:auto}
+.chart svg{display:block;width:100%;min-width:420px;height:auto}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px;justify-content:flex-end}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%) translateY(20px);background:var(--fg);color:var(--bg);padding:10px 16px;border-radius:999px;font-weight:600;font-size:.88rem;opacity:0;transition:.25s;z-index:99;pointer-events:none}
+.toast.show{opacity:1;transform:translateX(-50%)}
+.cta-panel{background:var(--llama);color:#0D1330;border:0}
+.cta-panel .btn{border-color:#0D1330;color:#0D1330}
+.cta-panel .btn.dark{background:#0D1330;color:#F2F4F8}
+.note{font-size:.75rem;color:var(--dim);margin-top:14px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+<script src="orbe-config.js"></script>
+<script src="orbe-auth.js"></script>
+</head>
+<body>
+<header>
+  <div class="bar">
+    <a class="logo" href="index.html" aria-label="orbe radar"><svg viewBox="0 0 100 110" aria-hidden="true"><path d="M12 106 Q50 95 88 106" fill="none" stroke="currentColor" stroke-width="4.5" stroke-linecap="round"/><path d="M44 98 C44 88 34 82 26 74 A34 34 0 1 1 76.05 71.86" fill="none" stroke="currentColor" stroke-width="8.5" stroke-linecap="round"/><circle cx="62.74" cy="81.52" r="6.4" fill="#FF5A1F"/></svg>orbe<small>radar</small></a>
+    <a class="btn" href="index.html" id="homeLink" style="border:0;padding:8px 6px">←</a>
+    <span class="sp"></span>
+    <div data-orbe-account></div>
+    <div class="seg" role="group" aria-label="Language"><button data-lang="es">ES</button><button data-lang="en">EN</button><button data-lang="pt">PT</button><button data-lang="fr">FR</button></div>
+    <button class="btn icon" id="themeBtn" aria-label="Theme"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v3M12 20v3M1 12h3M20 12h3"/></svg></button>
+  </div>
+</header>
+
+<div class="layout">
+  <aside>
+    <div class="panel">
+      <div class="price" id="price"></div>
+      <div class="era" id="era"></div>
+      <label class="lbl" for="slider" id="sliderLbl" style="margin-top:10px"></label>
+      <input type="range" id="slider" min="0" max="1000" value="0">
+      <div class="ticks" id="ticks"></div>
+      <div class="presets" id="presets"></div>
+    </div>
+    <div class="panel">
+      <div class="stat"><span id="stViableL"></span><b class="hot" id="stViable">0</b></div>
+      <div class="stat"><span id="stNextL"></span><b id="stNext" style="font-size:1rem"></b></div>
+      <div class="stat"><span id="stCustomL"></span><b id="stCustom">0</b></div>
+    </div>
+    <div class="panel cta-panel" id="ctaPanel">
+      <h2 id="ctaT"></h2>
+      <p style="margin:0 0 12px;font-size:.9rem" id="ctaD"></p>
+      <div class="row" style="flex-wrap:wrap"><a class="btn dark" id="buyBtn" target="_blank" rel="noopener"></a><button class="btn" id="codeBtn"></button></div>
+    </div>
+    <div class="panel">
+      <h2 id="subT"></h2>
+      <form id="subForm" method="post" target="_blank" class="row" style="flex-wrap:wrap">
+        <input class="field" type="email" name="email" required id="subEmail" style="flex:1 1 160px" autocomplete="email">
+        <button class="btn primary" type="submit" id="subBtn"></button>
+      </form>
+    </div>
+  </aside>
+
+  <main>
+    <div class="toolbar">
+      <input class="field" type="search" id="q" aria-label="Search">
+      <select class="field" id="sort" style="flex:0 0 auto" aria-label="Sort"></select>
+      <button class="btn" id="addBtn"></button>
+      <button class="btn" id="csvBtn"></button>
+      <button class="btn" id="shareBtn"></button>
+    </div>
+    <div class="chips" id="chips" style="margin-bottom:14px"></div>
+    <div class="grid" id="grid"></div>
+    <p class="note" id="disc"></p>
+    <nav class="note" id="legalNav" style="display:flex;gap:14px;flex-wrap:wrap"></nav>
+  </main>
+</div>
+
+<dialog id="dlg"><div class="sheet" id="sheet"></div></dialog>
+<dialog id="codeDlg"><div class="sheet" style="max-width:440px;margin:auto">
+  <h2 id="codeT"></h2><p class="muted small" id="codeD"></p>
+  <div id="codeExtra"></div>
+  <form id="codeForm" class="row" style="margin-top:8px"><input class="field" id="codeIn" autocomplete="off" required><button class="btn primary" id="codeOk"></button></form>
+  <p class="small" id="codeMsg" role="status" style="min-height:1.3em;color:var(--llama)"></p>
+  <div class="actions"><button class="btn" id="codeClose"></button></div>
+</div></dialog>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+/* ===== CONFIGURACIÓN ===== */
+function h(s){let x=2166136261;for(const c of s.trim().toUpperCase()){x^=c.charCodeAt(0);x=Math.imul(x,16777619)}return (x>>>0).toString(16).padStart(8,"0")}
+const OC=window.ORBE_CONFIG||{};
+const CFG={
+  substack:OC.substack||"",
+  freeCases:6,                                   // casos visibles sin acceso completo
+  codes:(OC.fallbackCodeHashes||[])                // solo se usan si Firebase no está configurado
+};
+/* ========================= */
+
+
+// m = kg puestos en órbita por unidad, r = ingreso por unidad (US$), c = costo sin lanzamiento por unidad, u = unidades/año
+const BASE=[
+["zblan","mfg",100,600000,350000,4,{es:["Fibra óptica en órbita","Fibra ZBLAN sin defectos de cristalización: hasta 10× menos pérdida de señal. Unidad = lote."],en:["In-orbit optical fiber","Defect-free ZBLAN fiber with far lower signal loss. Unit = batch."],pt:["Fibra óptica em órbita","Fibra ZBLAN sem defeitos de cristalização, com muito menos perda de sinal. Unidade = lote."],fr:["Fibre optique en orbite","Fibre ZBLAN sans défauts de cristallisation, bien moins de pertes. Unité = lot."]}],
+["protein","bio",20,400000,240000,6,{es:["Cristales de proteína","Cristales más grandes y ordenados para diseñar fármacos. Unidad = campaña."],en:["Protein crystals","Larger, better-ordered crystals for drug design. Unit = campaign."],pt:["Cristais de proteína","Cristais maiores e mais ordenados para desenhar fármacos. Unidade = campanha."],fr:["Cristaux de protéines","Cristaux plus grands et ordonnés pour concevoir des médicaments. Unité = campagne."]}],
+["pharma","bio",200,2000000,1300000,4,{es:["Fármacos en microgravedad","Nuevas formas cristalinas de medicamentos existentes, con retorno en cápsula. Unidad = misión."],en:["Microgravity drug formulation","New crystal forms of existing drugs, returned by capsule. Unit = mission."],pt:["Fármacos em microgravidade","Novas formas cristalinas de remédios existentes, com retorno em cápsula. Unidade = missão."],fr:["Médicaments en microgravité","Nouvelles formes cristallines de médicaments existants, retour par capsule. Unité = mission."]}],
+["agro","data",150,900000,720000,6,{es:["Satélites para agro pyme","Imágenes multiespectrales diarias vendidas por hectárea a medianos agricultores. Unidad = satélite/año."],en:["Satellites for small farms","Daily multispectral imagery sold per hectare to mid-size farmers. Unit = satellite/year."],pt:["Satélites para o pequeno agro","Imagens multiespectrais diárias vendidas por hectare. Unidade = satélite/ano."],fr:["Satellites pour petites fermes","Imagerie multispectrale quotidienne vendue à l’hectare. Unité = satellite/an."]}],
+["iot","data",60,500000,320000,8,{es:["IoT satelital","Sensores en minas, ganado y contenedores fuera de cobertura celular. Unidad = satélite/año."],en:["Satellite IoT","Sensors on mines, cattle and containers beyond cell coverage. Unit = satellite/year."],pt:["IoT por satélite","Sensores em minas, gado e contêineres fora da cobertura celular. Unidade = satélite/ano."],fr:["IoT satellitaire","Capteurs sur mines, bétail et conteneurs hors couverture mobile. Unité = satellite/an."]}],
+["semi","mfg",500,1200000,750000,3,{es:["Semiconductores en órbita","Cristales semilla ultrapuros para chips de potencia. Unidad = lote."],en:["In-orbit semiconductors","Ultra-pure seed crystals for power chips. Unit = batch."],pt:["Semicondutores em órbita","Cristais-semente ultrapuros para chips de potência. Unidade = lote."],fr:["Semi-conducteurs en orbite","Cristaux germes ultrapurs pour puces de puissance. Unité = lot."]}],
+["bioprint","bio",200,800000,500000,4,{es:["Bioimpresión de tejidos","Tejidos complejos que en tierra colapsan por su propio peso. Unidad = misión."],en:["Tissue bioprinting","Complex tissues that collapse under their own weight on Earth. Unit = mission."],pt:["Bioimpressão de tecidos","Tecidos complexos que na Terra colapsam com o próprio peso. Unidade = missão."],fr:["Bio-impression de tissus","Tissus complexes qui s’effondrent sous leur poids sur Terre. Unité = mission."]}],
+["capsule","log",250,1500000,1050000,6,{es:["Cápsulas de retorno","Bajar productos y muestras desde órbita como servicio. Unidad = vuelo."],en:["Return capsules","Bringing products and samples down from orbit as a service. Unit = flight."],pt:["Cápsulas de retorno","Trazer produtos e amostras da órbita como serviço. Unidade = voo."],fr:["Capsules de retour","Redescendre produits et échantillons de l’orbite, en service. Unité = vol."]}],
+["fuel","log",2000,3000000,1800000,4,{es:["Combustible en órbita","Gasolineras orbitales que extienden la vida útil de satélites. Unidad = entrega."],en:["In-orbit refueling","Orbital gas stations that extend satellite life. Unit = delivery."],pt:["Combustível em órbita","Postos orbitais que estendem a vida útil de satélites. Unidade = entrega."],fr:["Ravitaillement en orbite","Stations-service orbitales qui prolongent la vie des satellites. Unité = livraison."]}],
+["tug","log",800,2000000,1200000,5,{es:["Remolcadores orbitales","La “última milla”: llevar cada satélite a su órbita exacta. Unidad = misión."],en:["Orbital tugs","The last mile: taking each satellite to its exact orbit. Unit = mission."],pt:["Rebocadores orbitais","A última milha: levar cada satélite à sua órbita exata. Unidade = missão."],fr:["Remorqueurs orbitaux","Le dernier kilomètre : placer chaque satellite sur son orbite. Unité = mission."]}],
+["debris","infra",1500,1500000,900000,3,{es:["Limpieza de basura espacial","Retirar satélites muertos por contrato con operadores y agencias. Unidad = retiro."],en:["Space debris removal","Removing dead satellites under contract. Unit = removal."],pt:["Limpeza de lixo espacial","Retirar satélites mortos sob contrato. Unidade = retirada."],fr:["Nettoyage des débris","Retirer les satellites morts sous contrat. Unité = retrait."]}],
+["dc","infra",20000,8000000,5000000,1,{es:["Centros de datos orbitales","Cómputo con energía solar continua y enfriamiento radiativo. Unidad = módulo/año."],en:["Orbital data centers","Compute with constant solar power and radiative cooling. Unit = module/year."],pt:["Data centers orbitais","Computação com energia solar contínua e resfriamento radiativo. Unidade = módulo/ano."],fr:["Centres de données orbitaux","Calcul à énergie solaire continue et refroidissement radiatif. Unité = module/an."]}],
+["sbsp","energy",100000,9000000,6000000,1,{es:["Energía solar desde el espacio","Paneles en órbita que transmiten energía a tierra. Unidad = planta/año."],en:["Space-based solar power","Orbital panels beaming power to the ground. Unit = plant/year."],pt:["Energia solar do espaço","Painéis em órbita que transmitem energia para a Terra. Unidade = usina/ano."],fr:["Énergie solaire spatiale","Panneaux en orbite qui transmettent l’énergie au sol. Unité = centrale/an."]}],
+["hotel","consumer",40000,30000000,20000000,1,{es:["Hoteles orbitales","Estancias para turistas e investigadores. Unidad = año de operación."],en:["Orbital hotels","Stays for tourists and researchers. Unit = operating year."],pt:["Hotéis orbitais","Estadias para turistas e pesquisadores. Unidade = ano de operação."],fr:["Hôtels orbitaux","Séjours pour touristes et chercheurs. Unité = année d’exploitation."]}],
+["memorial","consumer",1,15000,3000,40,{es:["Memoriales espaciales","Cápsulas simbólicas con cenizas o mensajes. Unidad = cápsula."],en:["Space memorials","Symbolic capsules carrying ashes or messages. Unit = capsule."],pt:["Memoriais espaciais","Cápsulas simbólicas com cinzas ou mensagens. Unidade = cápsula."],fr:["Mémoriaux spatiaux","Capsules symboliques avec cendres ou messages. Unité = capsule."]}],
+["media","consumer",100,500000,300000,4,{es:["Medios desde órbita","Cámaras y contenido en vivo para marcas y creadores. Unidad = campaña."],en:["Media from orbit","Live cameras and content for brands and creators. Unit = campaign."],pt:["Mídia da órbita","Câmeras e conteúdo ao vivo para marcas e criadores. Unidade = campanha."],fr:["Médias depuis l’orbite","Caméras et contenus en direct pour marques et créateurs. Unité = campagne."]}],
+["edu","consumer",4,60000,40000,10,{es:["CubeSat educativo","Universidades y colegios lanzan su propio satélite llave en mano. Unidad = CubeSat."],en:["Educational CubeSat","Universities and schools launch their own turnkey satellite. Unit = CubeSat."],pt:["CubeSat educacional","Universidades e escolas lançam seu próprio satélite. Unidade = CubeSat."],fr:["CubeSat éducatif","Universités et écoles lancent leur propre satellite clé en main. Unité = CubeSat."]}],
+["weather","data",100,300000,230000,12,{es:["Meteorología hiperlocal","Constelación de radios de ocultación para pronósticos por distrito. Unidad = satélite/año."],en:["Hyperlocal weather","Radio-occultation constellation for district-level forecasts. Unit = satellite/year."],pt:["Meteorologia hiperlocal","Constelação de rádio-ocultação para previsões por bairro. Unidade = satélite/ano."],fr:["Météo hyperlocale","Constellation de radio-occultation pour des prévisions par quartier. Unité = satellite/an."]}],
+["methane","data",120,600000,432000,6,{es:["Monitoreo de metano","Detectar fugas en ductos y minas para cumplimiento ambiental. Unidad = satélite/año."],en:["Methane monitoring","Detecting leaks in pipelines and mines for compliance. Unit = satellite/year."],pt:["Monitoramento de metano","Detectar vazamentos em dutos e minas. Unidade = satélite/ano."],fr:["Surveillance du méthane","Détecter les fuites des pipelines et mines. Unité = satellite/an."]}],
+["insure","data",50,700000,500000,4,{es:["Seguros paramétricos","Pólizas que pagan solas cuando el satélite confirma sequía o inundación. Unidad = satélite/año."],en:["Parametric insurance","Policies that pay out when satellites confirm drought or flood. Unit = satellite/year."],pt:["Seguros paramétricos","Apólices que pagam sozinhas quando o satélite confirma seca ou enchente. Unidade = satélite/ano."],fr:["Assurance paramétrique","Polices déclenchées quand le satellite confirme sécheresse ou inondation. Unité = satellite/an."]}],
+["alloys","mfg",2000,2000000,1300000,2,{es:["Aleaciones en microgravedad","Metales amorfos y espumas metálicas imposibles en tierra. Unidad = lote."],en:["Microgravity alloys","Amorphous metals and metal foams impossible on Earth. Unit = batch."],pt:["Ligas em microgravidade","Metais amorfos e espumas metálicas impossíveis na Terra. Unidade = lote."],fr:["Alliages en microgravité","Métaux amorphes et mousses métalliques impossibles sur Terre. Unité = lot."]}],
+["d2c","infra",1500,3000000,1800000,10,{es:["Conectividad directa al celular","Señal satelital al teléfono en zonas rurales y en el mar. Unidad = satélite/año."],en:["Direct-to-cell connectivity","Satellite signal to ordinary phones in rural areas and at sea. Unit = satellite/year."],pt:["Conectividade direta ao celular","Sinal de satélite no celular em áreas rurais e no mar. Unidade = satélite/ano."],fr:["Connectivité directe au mobile","Signal satellite sur téléphone en zone rurale et en mer. Unité = satellite/an."]}],
+["asteroid","infra",5000,1000000,700000,1,{es:["Prospección de asteroides","Mapear recursos para la futura minería espacial y vender los datos. Unidad = misión."],en:["Asteroid prospecting","Mapping resources for future space mining and selling the data. Unit = mission."],pt:["Prospecção de asteroides","Mapear recursos para a futura mineração espacial. Unidade = missão."],fr:["Prospection d’astéroïdes","Cartographier les ressources pour la future exploitation minière. Unité = mission."]}],
+["seeds","bio",50,200000,120000,6,{es:["Semillas espaciales","Variedades resistentes por exposición a radiación y microgravedad. Unidad = lote."],en:["Space-bred seeds","Hardier crop varieties from radiation and microgravity exposure. Unit = batch."],pt:["Sementes espaciais","Variedades resistentes por exposição à radiação e microgravidade. Unidade = lote."],fr:["Semences spatiales","Variétés plus résistantes grâce aux radiations et à la microgravité. Unité = lot."]}],
+["scope","data",400,600000,420000,2,{es:["Telescopios como servicio","Tiempo de observación vendido a universidades y astrónomos aficionados. Unidad = telescopio/año."],en:["Telescopes as a service","Observation time sold to universities and amateur astronomers. Unit = telescope/year."],pt:["Telescópios como serviço","Tempo de observação vendido a universidades e astrônomos amadores. Unidade = telescópio/ano."],fr:["Télescopes en service","Temps d’observation vendu aux universités et astronomes amateurs. Unité = télescope/an."]}]
+];
+
+const SECT={mfg:{es:"Manufactura",en:"Manufacturing",pt:"Manufatura",fr:"Fabrication"},bio:{es:"Biotech",en:"Biotech",pt:"Biotech",fr:"Biotech"},data:{es:"Datos",en:"Data",pt:"Dados",fr:"Données"},log:{es:"Logística",en:"Logistics",pt:"Logística",fr:"Logistique"},infra:{es:"Infraestructura",en:"Infrastructure",pt:"Infraestrutura",fr:"Infrastructure"},energy:{es:"Energía",en:"Energy",pt:"Energia",fr:"Énergie"},consumer:{es:"Consumo",en:"Consumer",pt:"Consumo",fr:"Grand public"},custom:{es:"Mi idea",en:"My idea",pt:"Minha ideia",fr:"Mon idée"}};
+
+const PRESETS=[[7000,{es:"Falcon 9 compartido",en:"Falcon 9 rideshare",pt:"Falcon 9 carona",fr:"Falcon 9 partagé"}],[3200,{es:"Falcon 9 dedicado",en:"Dedicated Falcon 9",pt:"Falcon 9 dedicado",fr:"Falcon 9 dédié"}],[1500,{es:"Falcon Heavy",en:"Falcon Heavy",pt:"Falcon Heavy",fr:"Falcon Heavy"}],[200,{es:"Meta Starship",en:"Starship target",pt:"Meta Starship",fr:"Objectif Starship"}],[20,{es:"Largo plazo",en:"Long term",pt:"Longo prazo",fr:"Long terme"}]];
+
+const T={
+es:{actT:"Activa tu acceso completo",needLogin:"Inicia sesión o crea tu cuenta con el mismo correo con el que pagaste. El acceso se activa solo.",needVerify:"Activa tu cuenta desde el correo que te enviamos y vuelve aquí.",verifiedBtn:"Ya activé mi cuenta",licD:"Si pagaste con otro correo, pega aquí la clave de licencia que te envió Polar.",checkBtn:"Revisar mi compra de nuevo",signupBtn:"Crear cuenta",loginBtn:"Iniciar sesión",noPurchase:"Aún no vemos una compra con este correo. Pega tu clave de licencia o espera un minuto y vuelve a revisar.",paidSignup:"Gracias por tu compra. Crea tu cuenta con el mismo correo para activar el acceso.",thanksOk:"Gracias por tu compra. Ya tienes acceso completo.",netErr:"Sin conexión. Inténtalo de nuevo.",listOk:"Listo, te sumamos a la lista.",legal:["Términos", "Privacidad", "Uso de IA", "Reembolsos", "Cookies"],thanks:"Gracias por tu compra. Tu código está en el correo de Polar y en su página de confirmación.",per:" /kg a órbita",slider:"Precio de lanzamiento",eras:["Hoy: viaje compartido","Cohetes dedicados actuales","Primeros reutilizables pesados","Meta pública de Starship","Escenario de largo plazo"],viable:"Negocios rentables",next:"Siguiente en encenderse",custom:"Tus ideas guardadas",ctaT:"Desbloquea los 25 casos",ctaD:"El brief incluye el PDF, el modelo editable y tu código para este radar.",buy:"Comprar · $39",code:"Tengo un código",subT:"Un caso nuevo cada semana",subBtn:"Suscribirme",email:"tu@correo.com",search:"Buscar negocio…",sort:[["be","Más cerca de ser rentable"],["margin","Mayor margen a este precio"],["name","Nombre A–Z"]],all:"Todos",add:"+ Mi idea",csv:"Exportar CSV",share:"Copiar enlace",locked:"Bloqueado",beL:"Equilibrio",ok:"Rentable",no:"Aún no",gap:(x)=>`falta bajar ${x}`,none:"Ningún negocio coincide con la búsqueda. Prueba otra palabra o quita el filtro.",
+d:{mass:"Masa en órbita por unidad (kg)",rev:"Ingreso por unidad (US$)",cost:"Costo sin lanzamiento por unidad (US$)",units:"Unidades por año",name:"Nombre de tu idea",desc:"Descripción corta",launch:"Costo de lanzamiento por unidad",margin:"Margen por unidad",year:"Resultado anual",be:"Precio de equilibrio",chart:"Margen por unidad según el precio de lanzamiento",reset:"Restaurar supuestos",save:"Guardar",del:"Eliminar",close:"Cerrar",sprint:"Validar con un sprint · $149"},
+codeT:"Ingresa tu código",codeD:"Lo recibiste en el correo de compra de Polar.",codeOk:"Desbloquear",codeBad:"Ese código no es válido. Revisa mayúsculas y guiones.",codeGood:"Listo: los 25 casos están desbloqueados en este navegador.",close:"Cerrar",copied:"Enlace copiado",saved:"Idea guardada",exported:"CSV descargado",subOk:"Revisa tu correo para confirmar",
+disc:"Supuestos ilustrativos para explorar, no datos de mercado verificados ni asesoría de inversión. Edita cada caso con tus propios números. Precios de lanzamiento de referencia: aproximaciones de tarifas públicas y metas declaradas, nov. 2026."},
+en:{actT:"Activate full access",needLogin:"Log in or create your account with the same email you paid with. Access turns on automatically.",needVerify:"Activate your account from the email we sent you, then come back.",verifiedBtn:"I’ve activated my account",licD:"If you paid with a different email, paste the license key Polar sent you.",checkBtn:"Check my purchase again",signupBtn:"Create account",loginBtn:"Log in",noPurchase:"We don’t see a purchase for this email yet. Paste your license key or wait a minute and check again.",paidSignup:"Thanks for your purchase. Create your account with the same email to activate access.",thanksOk:"Thanks for your purchase. You now have full access.",netErr:"No connection. Try again.",listOk:"Done, you’re on the list.",legal:["Terms", "Privacy", "AI use", "Refunds", "Cookies"],thanks:"Thanks for your purchase. Your code is in the Polar email and on its confirmation page.",per:" /kg to orbit",slider:"Launch price",eras:["Today: rideshare","Current dedicated rockets","First heavy reusables","Starship's public target","Long-term scenario"],viable:"Profitable businesses",next:"Next to light up",custom:"Your saved ideas",ctaT:"Unlock all 25 cases",ctaD:"The brief includes the PDF, the editable model and your code for this radar.",buy:"Buy · $39",code:"I have a code",subT:"A new case every week",subBtn:"Subscribe",email:"you@email.com",search:"Search businesses…",sort:[["be","Closest to profitable"],["margin","Highest margin at this price"],["name","Name A–Z"]],all:"All",add:"+ My idea",csv:"Export CSV",share:"Copy link",locked:"Locked",beL:"Break-even",ok:"Profitable",no:"Not yet",gap:(x)=>`needs to drop ${x}`,none:"No business matches. Try another word or clear the filter.",
+d:{mass:"Mass to orbit per unit (kg)",rev:"Revenue per unit (US$)",cost:"Non-launch cost per unit (US$)",units:"Units per year",name:"Your idea's name",desc:"Short description",launch:"Launch cost per unit",margin:"Margin per unit",year:"Annual result",be:"Break-even price",chart:"Margin per unit vs launch price",reset:"Reset assumptions",save:"Save",del:"Delete",close:"Close",sprint:"Validate in a sprint · $149"},
+codeT:"Enter your code",codeD:"You received it in your Polar purchase email.",codeOk:"Unlock",codeBad:"That code isn't valid. Check capitals and dashes.",codeGood:"Done: all 25 cases are unlocked in this browser.",close:"Close",copied:"Link copied",saved:"Idea saved",exported:"CSV downloaded",subOk:"Check your inbox to confirm",
+disc:"Illustrative assumptions for exploration, not verified market data or investment advice. Edit every case with your own numbers. Reference launch prices approximate public rates and stated targets, Nov 2026."},
+pt:{actT:"Ative seu acesso completo",needLogin:"Entre ou crie sua conta com o mesmo e-mail do pagamento. O acesso é ativado automaticamente.",needVerify:"Ative sua conta pelo e-mail que enviamos e volte aqui.",verifiedBtn:"Já ativei minha conta",licD:"Se pagou com outro e-mail, cole aqui a chave de licença que a Polar enviou.",checkBtn:"Verificar minha compra de novo",signupBtn:"Criar conta",loginBtn:"Entrar",noPurchase:"Ainda não vemos uma compra com este e-mail. Cole sua chave de licença ou aguarde um minuto.",paidSignup:"Obrigado pela compra. Crie sua conta com o mesmo e-mail para ativar o acesso.",thanksOk:"Obrigado pela compra. Você já tem acesso completo.",netErr:"Sem conexão. Tente de novo.",listOk:"Pronto, você está na lista.",legal:["Termos", "Privacidade", "Uso de IA", "Reembolsos", "Cookies"],thanks:"Obrigado pela compra. Seu código está no e-mail da Polar e na página de confirmação.",per:" /kg até a órbita",slider:"Preço de lançamento",eras:["Hoje: carona","Foguetes dedicados atuais","Primeiros reutilizáveis pesados","Meta pública da Starship","Cenário de longo prazo"],viable:"Negócios lucrativos",next:"Próximo a acender",custom:"Suas ideias salvas",ctaT:"Libere os 25 casos",ctaD:"O brief inclui o PDF, o modelo editável e seu código para este radar.",buy:"Comprar · US$ 39",code:"Tenho um código",subT:"Um caso novo toda semana",subBtn:"Assinar",email:"voce@email.com",search:"Buscar negócio…",sort:[["be","Mais perto de dar lucro"],["margin","Maior margem a este preço"],["name","Nome A–Z"]],all:"Todos",add:"+ Minha ideia",csv:"Exportar CSV",share:"Copiar link",locked:"Bloqueado",beL:"Equilíbrio",ok:"Lucrativo",no:"Ainda não",gap:(x)=>`precisa cair ${x}`,none:"Nenhum negócio encontrado. Tente outra palavra ou limpe o filtro.",
+d:{mass:"Massa em órbita por unidade (kg)",rev:"Receita por unidade (US$)",cost:"Custo sem lançamento por unidade (US$)",units:"Unidades por ano",name:"Nome da sua ideia",desc:"Descrição curta",launch:"Custo de lançamento por unidade",margin:"Margem por unidade",year:"Resultado anual",be:"Preço de equilíbrio",chart:"Margem por unidade segundo o preço de lançamento",reset:"Restaurar premissas",save:"Salvar",del:"Excluir",close:"Fechar",sprint:"Validar num sprint · US$ 149"},
+codeT:"Digite seu código",codeD:"Você recebeu no e-mail de compra da Polar.",codeOk:"Liberar",codeBad:"Esse código não é válido. Confira maiúsculas e hifens.",codeGood:"Pronto: os 25 casos estão liberados neste navegador.",close:"Fechar",copied:"Link copiado",saved:"Ideia salva",exported:"CSV baixado",subOk:"Confira seu e-mail para confirmar",
+disc:"Premissas ilustrativas para explorar, não dados de mercado verificados nem recomendação de investimento. Edite cada caso com seus números. Preços de lançamento de referência aproximam tarifas públicas e metas declaradas, nov. 2026."},
+fr:{actT:"Activez l’accès complet",needLogin:"Connectez-vous ou créez un compte avec l’e-mail utilisé pour payer. L’accès s’active automatiquement.",needVerify:"Activez votre compte depuis l’e-mail envoyé, puis revenez ici.",verifiedBtn:"J’ai activé mon compte",licD:"Si vous avez payé avec un autre e-mail, collez la clé de licence envoyée par Polar.",checkBtn:"Vérifier à nouveau mon achat",signupBtn:"Créer un compte",loginBtn:"Se connecter",noPurchase:"Aucun achat trouvé pour cet e-mail. Collez votre clé de licence ou réessayez dans une minute.",paidSignup:"Merci pour votre achat. Créez votre compte avec le même e-mail pour activer l’accès.",thanksOk:"Merci pour votre achat. Vous avez maintenant l’accès complet.",netErr:"Pas de connexion. Réessayez.",listOk:"C’est fait, vous êtes inscrit.",legal:["Conditions", "Confidentialité", "Usage de l’IA", "Remboursements", "Cookies"],thanks:"Merci pour votre achat. Votre code est dans l’e-mail de Polar et sur sa page de confirmation.",per:" /kg en orbite",slider:"Prix de lancement",eras:["Aujourd’hui : vol partagé","Lanceurs dédiés actuels","Premiers lanceurs lourds réutilisables","Objectif public de Starship","Scénario de long terme"],viable:"Activités rentables",next:"Prochaine à s’allumer",custom:"Vos idées enregistrées",ctaT:"Débloquez les 25 cas",ctaD:"Le brief comprend le PDF, le modèle modifiable et votre code pour ce radar.",buy:"Acheter · 39 $",code:"J’ai un code",subT:"Un nouveau cas chaque semaine",subBtn:"S’abonner",email:"vous@email.com",search:"Rechercher une activité…",sort:[["be","Plus proche de la rentabilité"],["margin","Meilleure marge à ce prix"],["name","Nom A–Z"]],all:"Toutes",add:"+ Mon idée",csv:"Exporter CSV",share:"Copier le lien",locked:"Verrouillé",beL:"Équilibre",ok:"Rentable",no:"Pas encore",gap:(x)=>`doit baisser de ${x}`,none:"Aucune activité trouvée. Essayez un autre mot ou retirez le filtre.",
+d:{mass:"Masse en orbite par unité (kg)",rev:"Revenu par unité (US$)",cost:"Coût hors lancement par unité (US$)",units:"Unités par an",name:"Nom de votre idée",desc:"Description courte",launch:"Coût de lancement par unité",margin:"Marge par unité",year:"Résultat annuel",be:"Prix d’équilibre",chart:"Marge par unité selon le prix de lancement",reset:"Rétablir les hypothèses",save:"Enregistrer",del:"Supprimer",close:"Fermer",sprint:"Valider en sprint · 149 $"},
+codeT:"Saisissez votre code",codeD:"Vous l’avez reçu dans l’e-mail d’achat Polar.",codeOk:"Débloquer",codeBad:"Ce code n’est pas valide. Vérifiez majuscules et tirets.",codeGood:"C’est fait : les 25 cas sont débloqués dans ce navigateur.",close:"Fermer",copied:"Lien copié",saved:"Idée enregistrée",exported:"CSV téléchargé",subOk:"Vérifiez votre boîte mail pour confirmer",
+disc:"Hypothèses illustratives à explorer, ni données de marché vérifiées ni conseil en investissement. Modifiez chaque cas avec vos chiffres. Prix de lancement de référence : approximations des tarifs publics et objectifs annoncés, nov. 2026."}
+};
+
+/* ===== estado ===== */
+const store={get(k,d){try{const v=localStorage.getItem("orbe-radar-"+k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem("orbe-radar-"+k,JSON.stringify(v))}catch(e){}}};
+let lang="es",sector="all",query="",sortBy="be";
+let localUnlock=store.get("unlocked",false);
+const authOn=()=>!!(window.orbe&&window.orbe.enabled);
+let unlocked=false;
+function computeUnlock(){unlocked=authOn()?!!window.orbe.pro:localUnlock;return unlocked}
+computeUnlock();
+let overrides=store.get("overrides",{});
+let custom=store.get("custom",[]);
+const NUM={es:"de-DE",en:"en-US",pt:"pt-BR",fr:"fr-FR"};
+const fmt=(v,usd=true)=>{const a=Math.abs(v);let s;if(a>=1e6)s=(v/1e6).toLocaleString(NUM[lang],{maximumFractionDigits:1})+" M";else s=Math.round(v).toLocaleString(NUM[lang]);if(!usd)return s;return lang==="fr"?s+" $":lang==="pt"?"US$ "+s:(v<0?"-$"+s.replace("-",""):"$"+s)};
+const $=id=>document.getElementById(id);
+
+function cases(){
+  const base=BASE.map(([k,s,m,r,c,u,n],i)=>{const o=overrides[k]||{};return{k,s,m:o.m??m,r:o.r??r,c:o.c??c,u:o.u??u,def:{m,r,c,u},name:n[lang][0],desc:n[lang][1],i}});
+  const cus=custom.map((x,j)=>({...x,s:"custom",def:null,i:100+j}));
+  return base.concat(cus).map(x=>({...x,be:(x.r-x.c)/x.m}));
+}
+function priceAt(v){const x=Math.pow(10,4-3*(v/1000));const m=Math.pow(10,Math.floor(Math.log10(x))-1);return Math.round(x/m)*m}
+function sliderFor(p){return Math.round((4-Math.log10(p))/3*1000)}
+const P=()=>priceAt(+$("slider").value);
+
+function render(){
+  const d=T[lang],p=P(),all=cases();
+  $("price").innerHTML=fmt(p)+`<small>${d.per}</small>`;
+  $("era").textContent=d.eras[p>4000?0:p>1200?1:p>350?2:p>60?3:4];
+  $("ticks").innerHTML=[10000,1000,100,10].map(v=>`<span>${fmt(v)}</span>`).join("");
+  const viable=all.filter(x=>p<=x.be);
+  $("stViable").textContent=`${viable.length}/${all.length}`;
+  const next=all.filter(x=>x.be<p&&x.be>0).sort((a,b)=>b.be-a.be)[0];
+  $("stNext").textContent=next?`${next.name} · ${fmt(next.be)}`:"—";
+  $("stCustom").textContent=custom.length;
+  $("ctaPanel").style.display=unlocked?"none":"";
+  // list
+  let list=all.filter(x=>(sector==="all"||x.s===sector)&&(!query||(x.name+" "+x.desc).toLowerCase().includes(query)));
+  const margin=x=>x.r-x.c-x.m*p;
+  list.sort(sortBy==="name"?(a,b)=>a.name.localeCompare(b.name,lang):sortBy==="margin"?(a,b)=>margin(b)-margin(a):(a,b)=>{const ga=a.be>=p?-1:1,gb=b.be>=p?-1:1;if(ga!==gb)return ga-gb;return b.be-a.be});
+  const freeKeys=new Set(BASE.slice(0,CFG.freeCases).map(x=>x[0]));
+  $("grid").innerHTML=list.length?list.map(x=>{
+    const on=p<=x.be,locked=!unlocked&&x.s!=="custom"&&!freeKeys.has(x.k);
+    const pct=Math.max(4,Math.min(100,on?100:(Math.log10(10000)-Math.log10(p))/(Math.log10(10000)-Math.log10(Math.max(x.be,1)))*100));
+    return `<button class="case ${on?"on":""} ${locked?"locked":""}" data-k="${x.k}" aria-label="${locked?d.locked:x.name}">
+      <div class="top"><span class="tag">${SECT[x.s][lang]}</span><span class="small" style="font-weight:700;color:${on?"var(--llama)":"var(--dim)"}">${on?d.ok:d.no}</span></div>
+      <h3>${esc(x.name)}</h3><p>${esc(x.desc)}</p>
+      <div class="be"><span class="muted">${d.beL}</span><b>${fmt(x.be)}/kg</b></div>
+      <div class="meter"><span style="width:${pct}%"></span></div>
+      ${locked?`<div class="lock"><span>🔒 ${d.locked}</span></div>`:""}
+    </button>`}).join(""):`<div class="empty">${d.none}</div>`;
+  safeHash("#"+lang+"-"+Math.round(p));
+}
+function safeHash(h){try{if(location.hash!==h)history.replaceState(null,"",h)}catch(e){/* vista previa en sandbox: se ignora */}}
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
+
+function setLang(l){
+  lang=T[l]?l:"es";const d=T[lang];document.documentElement.lang=lang;
+  document.querySelectorAll(".seg button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.lang===lang));
+  $("sliderLbl").textContent=d.slider;$("stViableL").textContent=d.viable;$("stNextL").textContent=d.next;$("stCustomL").textContent=d.custom;
+  $("ctaT").textContent=d.ctaT;$("ctaD").textContent=d.ctaD;$("buyBtn").textContent=d.buy;$("codeBtn").textContent=d.code;
+  $("subT").textContent=d.subT;$("subBtn").textContent=d.subBtn;$("subEmail").placeholder=d.email;
+  $("q").placeholder=d.search;$("sort").innerHTML=d.sort.map(s=>`<option value="${s[0]}" ${s[0]===sortBy?"selected":""}>${s[1]}</option>`).join("");
+  $("addBtn").textContent=d.add;$("csvBtn").textContent=d.csv;$("shareBtn").textContent=d.share;$("disc").textContent=d.disc;$("legalNav").innerHTML=d.legal.map((x,i)=>`<a style="color:inherit" href="legal.html#${["terminos","privacidad","ia","reembolsos","cookies"][i]}">${x}</a>`).join("");
+  $("presets").innerHTML=PRESETS.map(p=>`<button data-p="${p[0]}">${p[1][lang]} · ${fmt(p[0])}</button>`).join("");
+  const secs=["all","mfg","bio","data","log","infra","energy","consumer","custom"];
+  $("chips").innerHTML=secs.map(s=>`<button data-s="${s}" aria-pressed="${s===sector}">${s==="all"?d.all:SECT[s][lang]}</button>`).join("");
+  $("codeT").textContent=d.codeT;$("codeD").textContent=d.codeD;$("codeOk").textContent=d.codeOk;$("codeClose").textContent=d.close;
+  store.set("lang",lang);render();
+}
+
+/* ===== detalle ===== */
+let current=null;
+function openCase(k,isNew){
+  const d=T[lang].d;
+  if(isNew){current={k:"c"+Date.now(),s:"custom",m:50,r:300000,c:200000,u:4,name:"",desc:"",def:null,isNew:true}}
+  else{const x=cases().find(c=>c.k===k);if(!x)return;
+    const freeKeys=new Set(BASE.slice(0,CFG.freeCases).map(b=>b[0]));
+    if(!unlocked&&x.s!=="custom"&&!freeKeys.has(x.k)){openCode();return}
+    current={...x}}
+  const x=current;
+  $("sheet").innerHTML=`
+    <div class="top" style="display:flex;justify-content:space-between;gap:10px;align-items:center"><span class="tag">${SECT[x.s][lang]}</span><button class="btn icon" id="dClose" aria-label="${d.close}">✕</button></div>
+    ${x.s==="custom"?`<div class="inputs" style="margin-top:12px"><label><span class="lbl">${d.name}</span><input class="field" id="fName" value="${esc(x.name)}" required></label><label><span class="lbl">${d.desc}</span><input class="field" id="fDesc" value="${esc(x.desc)}"></label></div>`:`<h2 style="margin-top:10px">${esc(x.name)}</h2><p class="muted" style="margin:0">${esc(x.desc)}</p>`}
+    <div class="kpis"><div class="kpi" id="kLaunch"><span class="small muted">${d.launch}</span><b></b></div><div class="kpi" id="kMargin"><span class="small muted">${d.margin}</span><b></b></div><div class="kpi" id="kBe"><span class="small muted">${d.be}</span><b></b></div></div>
+    <div class="inputs">
+      <label><span class="lbl">${d.mass}</span><input class="field" type="number" min="0.1" step="any" id="fM" value="${x.m}"></label>
+      <label><span class="lbl">${d.rev}</span><input class="field" type="number" min="0" step="any" id="fR" value="${x.r}"></label>
+      <label><span class="lbl">${d.cost}</span><input class="field" type="number" min="0" step="any" id="fC" value="${x.c}"></label>
+      <label><span class="lbl">${d.units}</span><input class="field" type="number" min="0" step="1" id="fU" value="${x.u}"></label>
+    </div>
+    <div class="kpi" id="kYear" style="margin-top:12px"><span class="small muted">${d.year}</span><b></b></div>
+    <div class="chart"><div class="small muted" style="margin-bottom:6px">${d.chart}</div><svg id="chart" viewBox="0 0 520 200" role="img" aria-label="${d.chart}"></svg></div>
+    <div class="actions">
+      ${x.def?`<button class="btn" id="dReset">${d.reset}</button>`:""}
+      ${x.s==="custom"&&!x.isNew?`<button class="btn" id="dDel">${d.del}</button>`:""}
+      <a class="btn" href="#" data-buy="sprint">${d.sprint}</a>
+      <button class="btn primary" id="dSave">${d.save}</button>
+    </div>`;
+  ["fM","fR","fC","fU"].forEach(id=>$(id).addEventListener("input",calc));
+  $("dClose").onclick=()=>$("dlg").close();
+  $("dSave").onclick=save;
+  if($("dReset"))$("dReset").onclick=()=>{delete overrides[x.k];store.set("overrides",overrides);$("dlg").close();render()};
+  if($("dDel"))$("dDel").onclick=()=>{custom=custom.filter(c=>c.k!==x.k);store.set("custom",custom);$("dlg").close();render()};
+  calc();$("dlg").showModal();
+}
+function vals(){return{m:Math.max(.1,+$("fM").value||.1),r:+$("fR").value||0,c:+$("fC").value||0,u:+$("fU").value||0}}
+function calc(){
+  const v=vals(),p=P(),launch=v.m*p,margin=v.r-v.c-launch,be=(v.r-v.c)/v.m,yr=margin*v.u;
+  $("kLaunch").querySelector("b").textContent=fmt(launch);
+  const km=$("kMargin");km.className="kpi "+(margin>=0?"good":"bad");km.querySelector("b").textContent=fmt(margin);
+  $("kBe").querySelector("b").textContent=be>0?fmt(be)+"/kg":"—";
+  const ky=$("kYear");ky.className="kpi "+(yr>=0?"good":"bad");ky.querySelector("b").textContent=fmt(yr);
+  // chart: x = log price 10..10000, y = margin
+  const W=520,H=200,L=56,R=10,Tp=10,B=26,xs=pr=>L+(Math.log10(pr)-1)/3*(W-L-R);
+  const pts=[];for(let i=0;i<=60;i++){const pr=Math.pow(10,1+3*i/60);pts.push([pr,v.r-v.c-v.m*pr])}
+  const ys=pts.map(q=>q[1]),mx=Math.max(...ys,0),mn=Math.min(...ys,0),sy=y=>Tp+(mx-y)/((mx-mn)||1)*(H-Tp-B);
+  const path=pts.map((q,i)=>(i?"L":"M")+xs(q[0]).toFixed(1)+" "+sy(q[1]).toFixed(1)).join(" ");
+  const col=getComputedStyle(document.documentElement).getPropertyValue("--fg");
+  let s=`<line x1="${L}" x2="${W-R}" y1="${sy(0)}" y2="${sy(0)}" stroke="#8FA8FF" stroke-opacity=".5" stroke-dasharray="3 4"/>`;
+  [10,100,1000,10000].forEach(t=>s+=`<text x="${xs(t)}" y="${H-6}" font-size="11" fill="#7E86A6" text-anchor="middle">${fmt(t)}</text>`);
+  s+=`<text x="${L-6}" y="${sy(mx)+4}" font-size="11" fill="#7E86A6" text-anchor="end">${fmt(mx)}</text><text x="${L-6}" y="${sy(mn)}" font-size="11" fill="#7E86A6" text-anchor="end">${fmt(mn)}</text>`;
+  s+=`<path d="${path}" fill="none" stroke="${col}" stroke-width="2.5"/>`;
+  if(be>=10&&be<=10000)s+=`<circle cx="${xs(be)}" cy="${sy(0)}" r="6" fill="#FF5A1F"/>`;
+  s+=`<line x1="${xs(p)}" x2="${xs(p)}" y1="${Tp}" y2="${H-B}" stroke="#FF5A1F" stroke-opacity=".6"/>`;
+  $("chart").innerHTML=s;
+}
+function save(){
+  const v=vals(),x=current;
+  if(x.s==="custom"){const name=$("fName").value.trim();if(!name){$("fName").focus();return}
+    const item={k:x.k,m:v.m,r:v.r,c:v.c,u:v.u,name,desc:$("fDesc").value.trim()};
+    const i=custom.findIndex(c=>c.k===x.k);if(i>=0)custom[i]=item;else custom.push(item);store.set("custom",custom)}
+  else{overrides[x.k]=v;store.set("overrides",overrides)}
+  $("dlg").close();toast(T[lang].saved);render();
+}
+
+/* ===== código ===== */
+function openCode(note){
+  const d=T[lang];$("codeMsg").textContent=note||"";$("codeMsg").style.color=note?"var(--senal)":"var(--llama)";$("codeIn").value="";
+  const f=$("codeForm"),extra=$("codeExtra");extra.innerHTML="";f.hidden=false;
+  if(authOn()){
+    const u=window.orbe.user;
+    $("codeT").textContent=d.actT;
+    if(!u){f.hidden=true;$("codeD").textContent=d.needLogin;extra.innerHTML=`<div class="row" style="flex-wrap:wrap;margin-top:6px"><button class="btn primary" data-a="signup">${d.signupBtn}</button><button class="btn" data-a="login">${d.loginBtn}</button></div>`}
+    else if(!u.emailVerified){f.hidden=true;$("codeD").textContent=d.needVerify;extra.innerHTML=`<div class="row" style="flex-wrap:wrap;margin-top:6px"><button class="btn primary" data-a="check">${d.verifiedBtn}</button></div>`}
+    else{$("codeD").textContent=d.licD;$("codeIn").placeholder="XXXX-XXXX-XXXX";extra.innerHTML=`<button class="btn" data-a="check" style="margin-top:4px">${d.checkBtn}</button>`}
+  }else{$("codeT").textContent=d.codeT;$("codeD").textContent=d.codeD;$("codeIn").placeholder=""}
+  if(!$("codeDlg").open)$("codeDlg").showModal();
+}
+$("codeExtra").addEventListener("click",async e=>{const a=e.target.dataset.a;if(!a)return;
+  if(a==="signup"||a==="login"){$("codeDlg").close();window.orbe.openAuth(a)}
+  if(a==="check"){e.target.disabled=true;await window.orbe.refreshPurchase();e.target.disabled=false;if(window.orbe.pro){$("codeDlg").close();toast(T[lang].codeGood)}else openCode(window.orbe.user.emailVerified?T[lang].noPurchase:T[lang].needVerify)}});
+$("codeForm").addEventListener("submit",async e=>{e.preventDefault();const d=T[lang],v=$("codeIn").value.trim();if(!v)return;
+  $("codeMsg").style.color="var(--muted)";$("codeMsg").textContent="…";
+  if(authOn()){const r=await window.orbe.activateLicense(v);
+    if(r.ok){$("codeMsg").style.color="#3DD68C";$("codeMsg").textContent=d.codeGood;setTimeout(()=>$("codeDlg").close(),1200)}
+    else{$("codeMsg").style.color="var(--llama)";$("codeMsg").textContent=r.error==="network"?d.netErr:d.codeBad}
+  }else{const ok=CFG.codes.includes(h(v));$("codeMsg").style.color="var(--llama)";$("codeMsg").textContent=ok?d.codeGood:d.codeBad;if(ok){localUnlock=true;store.set("unlocked",true);computeUnlock();render();setTimeout(()=>$("codeDlg").close(),1200)}}
+});
+$("codeClose").onclick=()=>$("codeDlg").close();
+
+/* ===== eventos ===== */
+$("slider").addEventListener("input",render);
+$("presets").addEventListener("click",e=>{const p=e.target.dataset.p;if(p){$("slider").value=sliderFor(+p);render()}});
+$("chips").addEventListener("click",e=>{const s=e.target.dataset.s;if(s){sector=s;document.querySelectorAll("#chips button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.s===s));render()}});
+$("q").addEventListener("input",e=>{query=e.target.value.toLowerCase().trim();render()});
+$("sort").addEventListener("change",e=>{sortBy=e.target.value;render()});
+$("grid").addEventListener("click",e=>{const b=e.target.closest(".case");if(b)openCase(b.dataset.k)});
+$("addBtn").onclick=()=>openCase(null,true);
+$("codeBtn").onclick=openCode;
+$("buyBtn").removeAttribute("target");$("buyBtn").href="#";
+function goBuy(kind){const u=window.orbe&&window.orbe.checkoutUrl?window.orbe.checkoutUrl(kind):"";if(u){location.href=u}else{location.href="index.html#contacto"}}
+document.addEventListener("click",e=>{const b=e.target.closest("[data-buy]");if(b){e.preventDefault();goBuy(b.dataset.buy)}});
+$("buyBtn").dataset.buy="brief";
+document.querySelectorAll(".seg button").forEach(b=>b.onclick=()=>setLang(b.dataset.lang));
+$("csvBtn").onclick=()=>{const p=P(),rows=[["name","sector","mass_kg","revenue_usd","cost_usd","units_year","breakeven_usd_kg","launch_price_usd_kg","margin_per_unit","annual_result","profitable"]];
+  cases().forEach(x=>{const m=x.r-x.c-x.m*p;rows.push([x.name,SECT[x.s].en,x.m,x.r,x.c,x.u,Math.round(x.be),p,Math.round(m),Math.round(m*x.u),p<=x.be?"yes":"no"])});
+  const csv=rows.map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(",")).join("\n");
+  const a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["\ufeff"+csv],{type:"text/csv"}));a.download=`orbe-radar-${p}usd-kg.csv`;document.body.appendChild(a);a.click();a.remove();toast(T[lang].exported)};
+$("shareBtn").onclick=()=>{const u=location.href;(navigator.clipboard?navigator.clipboard.writeText(u):Promise.reject()).then(()=>toast(T[lang].copied)).catch(()=>prompt("URL",u))};
+const sf=$("subForm");
+if(CFG.substack){sf.action=CFG.substack.replace(/\/$/,"")+"/api/v1/free?nojs=true";sf.addEventListener("submit",()=>setTimeout(()=>{toast(T[lang].subOk);sf.reset()},300))}
+else sf.addEventListener("submit",async e=>{e.preventDefault();try{const nd={type:"newsletter",email:$("subEmail").value.trim(),message:"Suscripción al newsletter",lang,page:"radar"};if(window.orbe&&window.orbe.enabled)await window.orbe.saveContact(nd);else{const r=await fetch("https://formsubmit.co/ajax/"+encodeURIComponent(OC.contactEmail),{method:"POST",headers:{"Content-Type":"application/json",Accept:"application/json"},body:JSON.stringify({_subject:"orbe · newsletter",_captcha:"false",email:nd.email,pagina:"radar"})});if(!r.ok)throw 0}toast(T[lang].listOk);sf.reset()}catch(err){toast(T[lang].netErr)}});
+function toast(m){const t=$("toast");t.textContent=m;t.classList.add("show");clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove("show"),1800)}
+$("dlg").addEventListener("click",e=>{if(e.target===$("dlg"))$("dlg").close()});
+const root=document.documentElement;const th=store.get("theme",null);if(th)root.dataset.theme=th;
+$("themeBtn").onclick=()=>{const light=root.dataset.theme?root.dataset.theme==="light":matchMedia("(prefers-color-scheme:light)").matches;root.dataset.theme=light?"dark":"light";store.set("theme",root.dataset.theme);if($("dlg").open)calc()};
+
+// inicio: #es-6000
+(function(){const m=location.hash.match(/^#(es|en|pt|fr)(?:-(\d+))?$/);let l=m?m[1]:store.get("lang",null);if(!T[l]){const n=(navigator.language||"es").slice(0,2);l=T[n]?n:"es"}
+  $("slider").value=sliderFor(m&&m[2]?Math.min(10000,Math.max(10,+m[2])):7000);setLang(l);
+  // Llegada desde Polar tras pagar: radar.html?paid=1
+  const paid=new URLSearchParams(location.search).has("paid");
+  if(!authOn()){if(paid&&!unlocked)openCode(T[lang].thanks);return}
+  let first=true;
+  window.orbe.on(async st=>{
+    computeUnlock();render();
+    if(!first)return;first=false;
+    if(paid&&!st.pro){
+      if(!st.user){window.orbe.openAuth("signup");toast(T[lang].paidSignup)}
+      else{await window.orbe.refreshPurchase();computeUnlock();render();if(window.orbe.pro)toast(T[lang].thanksOk);else openCode(T[lang].thanks)}
+    }
+  });
+})();
+</script>
+</body>
+</html>

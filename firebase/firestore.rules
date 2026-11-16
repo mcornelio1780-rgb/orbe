@@ -1,0 +1,38 @@
+rules_version = '2';
+// Reglas de seguridad de orbe. Copiar en Firebase console > Firestore > Reglas > Publicar.
+// Reemplaza TU-CORREO-ADMIN@gmail.com por el mismo correo de adminEmails en orbe-config.js.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isAdmin() {
+      return request.auth != null && request.auth.token.email_verified == true
+        && request.auth.token.email in ['TU-CORREO-ADMIN@gmail.com'];
+    }
+
+    // Perfil de cada usuario. El usuario NO puede darse acceso pago a sí mismo:
+    // los campos pro / plan / license* solo los escribe el servidor (/api).
+    match /users/{uid} {
+      allow read: if (request.auth != null && request.auth.uid == uid) || isAdmin();
+      allow create: if request.auth != null && request.auth.uid == uid
+        && request.resource.data.keys().hasOnly(['email','name','lang','lastLogin','createdAt']);
+      allow update: if request.auth != null && request.auth.uid == uid
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['email','name','lang','lastLogin']);
+    }
+
+    // Compras registradas por el webhook de Polar (clave = correo en minúsculas).
+    match /purchases/{email} {
+      allow read: if (request.auth != null && request.auth.token.email_verified == true
+        && request.auth.token.email.lower() == email) || isAdmin();
+      allow write: if false;
+    }
+
+    // Formularios de contacto y preguntas: cualquiera puede enviar, solo el admin lee.
+    match /contacts/{id} {
+      allow create: if request.resource.data.keys().hasOnly(['type','name','email','company','country','message','lang','page','uid','status','createdAt'])
+        && request.resource.data.email is string && request.resource.data.email.size() < 200
+        && request.resource.data.message is string && request.resource.data.message.size() < 4001
+        && request.resource.data.status == 'new';
+      allow read, update, delete: if isAdmin();
+    }
+  }
+}

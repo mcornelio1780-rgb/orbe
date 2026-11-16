@@ -1,0 +1,9 @@
+{
+  "name": "orbe-web",
+  "private": true,
+  "description": "orbe: landing + radar + API (Vercel)",
+  "engines": { "node": ">=18" },
+  "dependencies": {
+    "firebase-admin": "^12.1.0"
+  }
+}

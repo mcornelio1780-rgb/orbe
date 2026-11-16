@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>orbe · Panel</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 110'%3E%3Crect x='-10' y='-5' width='120' height='120' rx='26' fill='%230D1330'/%3E%3Cpath d='M44 98 C44 88 34 82 26 74 A34 34 0 1 1 76.05 71.86' fill='none' stroke='%23F2F4F8' stroke-width='10' stroke-linecap='round'/%3E%3Ccircle cx='62.74' cy='81.52' r='8' fill='%23FF5A1F'/%3E%3C/svg%3E">
+<script src="orbe-config.js"></script>
+<script src="orbe-auth.js"></script>
+<style>
+:root{--bg:#F2F4F8;--fg:#0D1330;--muted:#50566E;--line:#D9DEEA;--card:#fff;--soft:#E7EBF3;--llama:#FF5A1F;font-family:"Hanken Grotesk",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px)}
+@media (prefers-color-scheme:dark){:root{--bg:#070A1C;--fg:#F2F4F8;--muted:#A3A9C2;--line:#232A4D;--card:#0D1330;--soft:#0F1638;color-scheme:dark}}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--fg);font-size:15px}
+.bar{max-width:1240px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.bar h1{font-family:Georgia,serif;font-size:1.4rem;margin:0}
+.sp{flex:1}
+main{max-width:1240px;margin:0 auto;padding:0 20px 60px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin:10px 0 20px}
+.stats div{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px}
+.stats b{display:block;font-size:1.8rem;font-family:Georgia,serif}
+.tabs{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
+.tabs button,.btn{border:1.5px solid var(--line);background:var(--card);color:var(--fg);border-radius:999px;padding:7px 14px;font:inherit;font-weight:600;cursor:pointer}
+.tabs button[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.btn.primary{background:var(--llama);border-color:var(--llama);color:#0D1330}
+.box{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:820px}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top;font-size:.9rem}
+th{color:var(--muted);font-size:.8rem}
+td.msg{max-width:420px;white-space:pre-wrap}
+.tag{display:inline-block;border-radius:999px;padding:2px 8px;font-size:.75rem;font-weight:700;background:var(--soft)}
+.tag.new{background:rgba(255,90,31,.15);color:var(--llama)}
+.center{max-width:460px;margin:12vh auto;text-align:center;padding:20px}
+select,input{border:1.5px solid var(--line);border-radius:10px;padding:7px 10px;background:var(--card);color:var(--fg);font:inherit}
+</style>
+</head>
+<body>
+<div class="bar"><h1>orbe · Panel</h1><span class="sp"></span><div data-orbe-account></div></div>
+<main id="app"><div class="center"><p>Cargando…</p></div></main>
+<script>
+const C=window.ORBE_CONFIG||{};
+const ADMINS=(C.adminEmails||[]).map(e=>String(e).toLowerCase()).filter(Boolean);
+const app=document.getElementById("app");
+const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const fmt=ts=>ts&&ts.toDate?ts.toDate().toLocaleString("es-PE"):"";
+let data={contacts:[],purchases:[],users:[]},tab="contacts",filter="all";
+
+if(!window.orbe||!window.orbe.enabled){app.innerHTML=`<div class="center"><h2>Firebase no está configurado</h2><p>Completa la sección firebase en orbe-config.js para usar el panel.</p></div>`}
+else window.orbe.on(async st=>{
+  const u=st.user;
+  if(!u){app.innerHTML=`<div class="center"><h2>Panel de administración</h2><p>Inicia sesión con el correo administrador.</p><button class="btn primary" onclick="orbe.openAuth('login')">Iniciar sesión</button></div>`;return}
+  if(!ADMINS.includes((u.email||"").toLowerCase())||!u.emailVerified){app.innerHTML=`<div class="center"><h2>Sin permiso</h2><p>${esc(u.email)} no es administrador. Agrega el correo en adminEmails (orbe-config.js) y en firestore.rules.</p></div>`;return}
+  await loadAll();
+});
+
+async function loadAll(){
+  app.innerHTML=`<div class="center"><p>Cargando datos…</p></div>`;
+  try{
+    const fb=await window.orbe.firebase();const {db,f}=fb;
+    const get=async(name,order)=>{const q=order?f.query(f.collection(db,name),f.orderBy(order,"desc"),f.limit(1000)):f.query(f.collection(db,name),f.limit(1000));const s=await f.getDocs(q);return s.docs.map(d=>({id:d.id,...d.data()}))};
+    data.contacts=await get("contacts","createdAt");
+    data.purchases=await get("purchases");
+    data.users=await get("users");
+    draw();
+  }catch(e){console.error(e);app.innerHTML=`<div class="center"><h2>No se pudieron leer los datos</h2><p>Revisa que las reglas de Firestore estén publicadas y que tu correo esté en isAdmin(). Detalle: ${esc(e.code||e.message)}</p></div>`}
+}
+
+function draw(){
+  const c=data.contacts,newC=c.filter(x=>x.status==="new").length,pro=data.users.filter(u=>u.pro).length;
+  const types=[...new Set(c.map(x=>x.type))];
+  let rows="";
+  if(tab==="contacts"){
+    const list=c.filter(x=>filter==="all"||x.type===filter);
+    rows=`<table><thead><tr><th>Fecha</th><th>Tipo</th><th>Nombre</th><th>Correo</th><th>Empresa · País</th><th>Mensaje</th><th>Estado</th></tr></thead><tbody>${list.map(x=>`<tr><td>${esc(fmt(x.createdAt))}</td><td><span class="tag">${esc(x.type)}</span></td><td>${esc(x.name)}</td><td><a href="mailto:${esc(x.email)}?subject=orbe">${esc(x.email)}</a></td><td>${esc(x.company)} ${esc(x.country)}</td><td class="msg">${esc(x.message)}</td><td><button class="btn" data-st="${esc(x.id)}"><span class="tag ${x.status==="new"?"new":""}">${x.status==="new"?"Nuevo":"Respondido"}</span></button></td></tr>`).join("")||`<tr><td colspan="7">Sin mensajes todavía.</td></tr>`}</tbody></table>`;
+  }else if(tab==="purchases"){
+    rows=`<table><thead><tr><th>Correo</th><th>Productos</th><th>Último monto</th><th>Activo</th><th>Actualizado</th></tr></thead><tbody>${data.purchases.map(x=>`<tr><td>${esc(x.id)}</td><td>${esc((x.products||[]).join(", "))}</td><td>${x.lastAmount!=null?esc((x.lastAmount/100).toFixed(2))+" "+esc((x.currency||"").toUpperCase()):""}</td><td>${x.pro?"Sí":"No"}</td><td>${esc(fmt(x.updatedAt))}</td></tr>`).join("")||`<tr><td colspan="5">Sin compras todavía.</td></tr>`}</tbody></table>`;
+  }else{
+    rows=`<table><thead><tr><th>Correo</th><th>Nombre</th><th>Idioma</th><th>Acceso completo</th><th>Alta</th><th>Último ingreso</th></tr></thead><tbody>${data.users.map(x=>`<tr><td>${esc(x.email)}</td><td>${esc(x.name)}</td><td>${esc(x.lang)}</td><td>${x.pro?"Sí":"No"}</td><td>${esc(fmt(x.createdAt))}</td><td>${esc(fmt(x.lastLogin))}</td></tr>`).join("")}</tbody></table>`;
+  }
+  app.innerHTML=`<div class="stats"><div>Mensajes<b>${c.length}</b></div><div>Sin responder<b>${newC}</b></div><div>Usuarios<b>${data.users.length}</b></div><div>Con acceso completo<b>${pro}</b></div><div>Compras registradas<b>${data.purchases.length}</b></div></div>
+  <div class="tabs"><button data-t="contacts" aria-pressed="${tab==="contacts"}">Mensajes y preguntas</button><button data-t="purchases" aria-pressed="${tab==="purchases"}">Compras</button><button data-t="users" aria-pressed="${tab==="users"}">Usuarios</button>
+  <span class="sp"></span>${tab==="contacts"?`<select id="flt"><option value="all">Todos los tipos</option>${types.map(t=>`<option ${t===filter?"selected":""}>${esc(t)}</option>`).join("")}</select>`:""}<button class="btn" id="csv">Exportar CSV</button><button class="btn" id="reload">Actualizar</button></div>
+  <div class="box">${rows}</div>`;
+}
+app.addEventListener("click",async e=>{
+  const t=e.target.closest("[data-t]");if(t){tab=t.dataset.t;draw();return}
+  if(e.target.id==="reload"){loadAll();return}
+  if(e.target.id==="csv"){const list=tab==="contacts"?data.contacts:tab==="purchases"?data.purchases:data.users;if(!list.length)return;
+    const keys=[...new Set(list.flatMap(o=>Object.keys(o)))];const val=v=>v&&v.toDate?v.toDate().toISOString():Array.isArray(v)?v.join("|"):v==null?"":String(v);
+    const csv=[keys.join(",")].concat(list.map(o=>keys.map(k=>`"${val(o[k]).replace(/"/g,'""')}"`).join(","))).join("\n");
+    const a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["\ufeff"+csv],{type:"text/csv"}));a.download=`orbe-${tab}-${new Date().toISOString().slice(0,10)}.csv`;a.click();return}
+  const s=e.target.closest("[data-st]");if(s){const id=s.dataset.st,x=data.contacts.find(c=>c.id===id);const fb=await window.orbe.firebase();
+    const ns=x.status==="new"?"answered":"new";await fb.f.updateDoc(fb.f.doc(fb.db,"contacts",id),{status:ns});x.status=ns;draw()}
+});
+app.addEventListener("change",e=>{if(e.target.id==="flt"){filter=e.target.value;draw()}});
+</script>
+</body>
+</html>

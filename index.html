@@ -1,0 +1,622 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>orbe · Qué construir cuando el espacio sea barato</title>
+<meta name="description" content="orbe es el radar de la economía orbital: 25 modelos de negocio y el precio de lanzamiento al que cada uno se vuelve rentable.">
+<meta property="og:title" content="orbe · The orbital economy radar">
+<meta property="og:description" content="25 space business models and the launch price at which each one breaks even. ES · EN · PT · FR.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 110'%3E%3Crect x='-10' y='-5' width='120' height='120' rx='26' fill='%230D1330'/%3E%3Cpath d='M44 98 C44 88 34 82 26 74 A34 34 0 1 1 76.05 71.86' fill='none' stroke='%23F2F4F8' stroke-width='10' stroke-linecap='round'/%3E%3Ccircle cx='62.74' cy='81.52' r='8' fill='%23FF5A1F'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --noche:#0D1330;--abismo:#070A1C;--llama:#FF5A1F;--senal:#8FA8FF;--hielo:#F2F4F8;--grafito:#50566E;
+  --bg:#F2F4F8;--fg:#0D1330;--muted:#50566E;--line:#D9DEEA;--card:#FFFFFF;--soft:#E7EBF3;
+  --serif:"Fraunces",Georgia,"Times New Roman",serif;--sans:"Hanken Grotesk",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#070A1C;--fg:#F2F4F8;--muted:#A3A9C2;--line:#232A4D;--card:#0D1330;--soft:#0F1638;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#070A1C;--fg:#F2F4F8;--muted:#A3A9C2;--line:#232A4D;--card:#0D1330;--soft:#0F1638;color-scheme:dark}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 76px);scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--sans);font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+img,svg{max-width:100%}
+:focus-visible{outline:3px solid var(--llama);outline-offset:3px;border-radius:6px}
+.skip{position:absolute;left:-999px;top:8px;background:var(--fg);color:var(--bg);padding:8px 14px;border-radius:8px;z-index:99}
+.skip:focus{left:12px}
+.wrap{max-width:1160px;margin:0 auto;padding:0 24px}
+h1,h2,h3{font-family:var(--serif);font-weight:600;letter-spacing:-.018em;line-height:1.06;margin:0}
+h2{font-size:clamp(2rem,4.4vw,3.2rem);max-width:20ch}
+h3{font-size:1.3rem}
+p{margin:.6em 0;max-width:62ch}
+.muted{color:var(--muted)}
+/* header */
+header.top{position:sticky;top:0;z-index:40;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line);padding-top:env(safe-area-inset-top,0px)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:50;background:var(--bg)}
+.bar{display:flex;align-items:center;gap:20px;height:64px}
+.logo{display:flex;align-items:center;gap:8px;text-decoration:none;font-family:var(--serif);font-weight:600;font-size:1.55rem;letter-spacing:-.03em}
+.logo svg{height:1.2em;width:auto}
+.links{display:flex;gap:22px;margin-left:12px}
+.links a{text-decoration:none;color:var(--muted);font-size:.95rem}
+.links a:hover{color:var(--fg)}
+.right{margin-left:auto;display:flex;gap:10px;align-items:center}
+.lang{display:flex;border:1px solid var(--line);border-radius:999px;padding:3px}
+.lang button{background:none;border:0;color:var(--muted);font:inherit;font-size:.8rem;font-weight:600;padding:5px 9px;border-radius:999px;cursor:pointer}
+.lang button[aria-pressed="true"]{background:var(--fg);color:var(--bg)}
+.theme{background:none;border:1px solid var(--line);color:var(--fg);width:34px;height:34px;border-radius:50%;cursor:pointer;display:grid;place-items:center}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:999px;padding:13px 22px;font:inherit;font-weight:700;font-size:.98rem;text-decoration:none;cursor:pointer;border:1.5px solid transparent;transition:transform .15s}
+.btn:active{transform:scale(.98)}
+.btn.primary{background:var(--llama);color:#0D1330}
+.btn.primary:hover{background:#FF6E3A}
+.btn.ghost{border-color:var(--fg);color:var(--fg);background:none}
+.btn.small{padding:9px 16px;font-size:.88rem}
+@media(max-width:900px){.links{display:none}}
+@media(max-width:560px){.bar .btn.small{display:none}}
+/* hero */
+.hero{background:#070A1C;color:#F2F4F8;position:relative;overflow:hidden}
+.hero .stars{position:absolute;inset:0;width:100%;height:100%}
+.hero-in{position:relative;display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center;padding:88px 24px 96px}
+@media(max-width:960px){.hero-in{grid-template-columns:1fr;padding:56px 24px 64px}}
+.hero h1{font-size:clamp(2.6rem,6.2vw,5rem);line-height:1.02;max-width:13ch}
+.hero .sub{font-size:1.18rem;color:#B9BFD6;max-width:46ch;margin-top:20px}
+.hero .ctas{display:flex;gap:12px;flex-wrap:wrap;margin-top:30px}
+.hero .ctas .btn.ghost{border-color:#F2F4F8;color:#F2F4F8}
+.hero .proof{margin-top:28px;font-size:.92rem;color:#A3A9C2;display:flex;gap:18px;flex-wrap:wrap}
+.hero .proof b{color:#F2F4F8}
+/* radar widget */
+.radar{background:#0D1330;border:1px solid #232A4D;border-radius:24px;padding:24px;box-shadow:0 40px 80px -40px rgba(0,0,0,.8)}
+.radar .head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+.radar .price{font-family:var(--serif);font-size:clamp(2.4rem,5vw,3.4rem);font-weight:600;line-height:1}
+.radar .price small{font-family:var(--sans);font-size:.95rem;color:#A3A9C2;font-weight:500}
+.radar .era{font-size:.85rem;color:#8FA8FF;min-height:1.4em}
+.radar input[type=range]{width:100%;margin:18px 0 6px;accent-color:#FF5A1F;height:28px}
+.ticks{display:flex;justify-content:space-between;font-size:.72rem;color:#7E86A6}
+.biz{list-style:none;margin:18px 0 0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+@media(max-width:480px){.biz{grid-template-columns:1fr}}
+.biz li{display:flex;justify-content:space-between;gap:8px;align-items:center;padding:10px 12px;border-radius:12px;background:#111A40;color:#7E86A6;font-size:.88rem;transition:background .25s,color .25s}
+.biz li b{font-weight:600}
+.biz li span{font-size:.75rem;white-space:nowrap}
+.biz li.on{background:#1B2557;color:#F2F4F8}
+.biz li.on span{color:#FF5A1F;font-weight:700}
+.radar .count{margin-top:14px;font-size:.9rem;color:#B9BFD6}
+.radar .count b{color:#FF5A1F}
+/* sections */
+section{padding:104px 0}
+@media(max-width:720px){section{padding:68px 0}}
+.kicker{font-family:var(--serif);font-style:italic;color:var(--llama);font-size:1.1rem;margin-bottom:10px}
+.shift{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;margin-top:48px;border-top:1px solid var(--line)}
+.shift div{padding:28px 24px 0 0}
+.shift div+div{padding-left:24px;border-left:1px solid var(--line)}
+.shift .n{font-family:var(--serif);font-size:clamp(2.4rem,5vw,3.6rem);font-weight:600;line-height:1}
+@media(max-width:760px){.shift{grid-template-columns:1fr}.shift div+div{border-left:0;padding-left:0;border-top:1px solid var(--line);margin-top:20px}}
+.src{font-size:.8rem;color:var(--muted);margin-top:22px}
+.inside{display:grid;grid-template-columns:.9fr 1.1fr;gap:56px;align-items:start}
+@media(max-width:900px){.inside{grid-template-columns:1fr;gap:32px}}
+.toc-list{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+.toc-list li{display:grid;grid-template-columns:44px 1fr;gap:12px;padding:18px 0;border-bottom:1px solid var(--line)}
+.toc-list li i{font-family:var(--serif);color:var(--llama);font-size:1.1rem}
+.toc-list b{display:block;font-weight:600}
+.toc-list span{color:var(--muted);font-size:.95rem}
+.cover{aspect-ratio:3/4;max-width:380px;border-radius:10px 22px 22px 10px;background:#0D1330;color:#F2F4F8;padding:34px 30px;display:flex;flex-direction:column;justify-content:space-between;box-shadow:24px 30px 60px -28px rgba(13,19,48,.55);position:relative;overflow:hidden;margin:0 auto}
+.cover::before{content:"";position:absolute;left:0;top:0;bottom:0;width:10px;background:linear-gradient(90deg,rgba(0,0,0,.35),transparent)}
+.cover h3{font-size:2rem;line-height:1.05}
+.for{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px;margin-top:44px}
+@media(max-width:960px){.for{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){.for{grid-template-columns:1fr}}
+.for article{border-top:2px solid var(--fg);padding-top:16px}
+.for h3{font-size:1.2rem;margin-bottom:6px}
+.for p{font-size:.95rem;color:var(--muted);margin:0}
+.steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px;margin-top:44px}
+@media(max-width:820px){.steps{grid-template-columns:1fr}}
+.steps li{list-style:none}
+.steps ol{padding:0;margin:0;display:contents}
+.steps .s{font-family:var(--serif);font-size:3rem;color:var(--llama);line-height:1}
+/* pricing */
+.dark{background:#0D1330;color:#F2F4F8}
+.dark .muted{color:#A3A9C2}
+.plans{display:grid;grid-template-columns:1.25fr 1fr 1fr;gap:18px;margin-top:44px;align-items:stretch}
+@media(max-width:960px){.plans{grid-template-columns:1fr}}
+.plan{border:1px solid #2A3360;border-radius:22px;padding:28px;display:flex;flex-direction:column;gap:10px;background:#0F1638}
+.plan.main{background:#F2F4F8;color:#0D1330;border-color:#F2F4F8}
+.plan.main .muted{color:#50566E}
+.plan .amt{font-family:var(--serif);font-size:3rem;font-weight:600;line-height:1}
+.plan .amt small{font-family:var(--sans);font-size:.95rem;font-weight:500}
+.plan ul{margin:6px 0 14px;padding-left:18px}
+.plan li{margin:4px 0;font-size:.95rem}
+.plan .btn{margin-top:auto}
+.plan .dark-ghost{border-color:#F2F4F8;color:#F2F4F8;background:none}
+.badge{align-self:flex-start;font-size:.78rem;font-weight:700;background:#FF5A1F;color:#0D1330;border-radius:999px;padding:4px 10px}
+.regional{margin-top:22px;font-size:.92rem;color:#A3A9C2}
+.corp{margin-top:18px;border:1px dashed #2A3360;border-radius:18px;padding:20px 24px;display:flex;justify-content:space-between;gap:16px;align-items:center;flex-wrap:wrap}
+/* founder */
+.founder{display:grid;grid-template-columns:auto 1fr;gap:40px;align-items:center}
+@media(max-width:720px){.founder{grid-template-columns:1fr}}
+.portrait{width:180px;height:180px;border-radius:50%;background:#0D1330;display:grid;place-items:center;color:#F2F4F8;font-family:var(--serif);font-size:3.2rem}
+blockquote{font-family:var(--serif);font-style:italic;font-size:clamp(1.4rem,2.6vw,2rem);line-height:1.3;margin:0 0 14px;max-width:30ch}
+.pstats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;margin:34px 0 8px;border-top:1px solid var(--line)}
+.pstats div{padding:22px 18px 0 0}.pstats div+div{padding-left:18px;border-left:1px solid var(--line)}
+.pstats b{display:block;font-family:var(--serif);font-size:clamp(1.8rem,3.4vw,2.6rem);font-weight:600;line-height:1.05}
+.pstats span{display:block;color:var(--muted);font-size:.92rem;margin-top:6px}
+@media(max-width:860px){.pstats{grid-template-columns:repeat(2,minmax(0,1fr))}.pstats div:nth-child(3){border-left:0;padding-left:0}.pstats div{margin-bottom:18px}}
+.pains{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px;margin-top:44px}
+@media(max-width:820px){.pains{grid-template-columns:1fr}}
+.pains article{border-top:2px solid var(--fg);padding-top:16px}
+.pains .pn{font-family:var(--serif);font-style:italic;color:var(--llama);font-size:1.1rem}
+.pains h3{margin:6px 0}.pains p{color:var(--muted);margin:0}
+.solution{margin-top:44px;background:var(--soft);border-radius:20px;padding:26px 28px;border-left:4px solid var(--llama)}
+.solution p{margin:.4em 0 0;font-size:1.08rem}
+.ex-rows{display:flex;flex-direction:column;gap:10px}
+.ex{display:grid;grid-template-columns:1fr auto;gap:2px 12px;background:#0F1638;border:1px solid #2A3360;border-radius:16px;padding:16px 18px}
+.ex span{color:#A3A9C2;font-size:.92rem}.ex b{font-family:var(--serif);font-size:1.6rem;font-weight:600;grid-row:span 2;align-self:center}
+.ex small{color:#7E86A6;font-size:.8rem}.ex .neg{color:#FF6B6B}.ex .pos{color:#3DD68C}
+.ex.hot{border-color:#FF5A1F}.ex.hot b{color:#FF5A1F}
+.small-note{font-size:.88rem}
+.quotes{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px;margin-top:20px}
+.quotes figure{margin:0;border-top:2px solid var(--fg);padding-top:16px}
+.quotes blockquote{font-size:1.25rem}
+.qform{max-width:820px;margin-top:28px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px 20px}
+.qrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+.qrow input{flex:1 1 200px;min-width:0}
+.qform input,.cform input,.cform select,.cform textarea{padding:12px 14px;border-radius:12px;border:1.5px solid var(--line);background:var(--bg);color:var(--fg);font:inherit;width:100%;box-sizing:border-box}
+.qform input:focus,.cform input:focus,.cform select:focus,.cform textarea:focus{outline:2px solid var(--llama);outline-offset:1px}
+.fmsg{min-height:1.3em;font-size:.9rem;margin-top:10px}.fmsg.ok{color:#1F9D63}.fmsg.err{color:#E5484D}
+.contact{display:grid;grid-template-columns:.9fr 1.1fr;gap:48px;align-items:start}
+@media(max-width:900px){.contact{grid-template-columns:1fr;gap:28px}}
+.cform{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:24px;display:flex;flex-direction:column;gap:14px}
+.cform label{display:flex;flex-direction:column;gap:6px;font-size:.88rem;color:var(--muted)}
+.cform .two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:560px){.cform .two{grid-template-columns:1fr}}
+.cform .consent{flex-direction:row;align-items:flex-start;gap:10px;font-size:.84rem}
+.cform .consent input{width:auto;margin-top:3px}
+.foot .legal,footer nav.legal{display:flex;gap:16px;flex-wrap:wrap;margin-top:18px;font-size:.86rem}
+footer nav.legal a{color:var(--muted)}
+[data-orbe-account]:empty{display:none}
+/* faq */
+.faq{max-width:820px;margin-top:36px;border-top:1px solid var(--line)}
+.faq details{border-bottom:1px solid var(--line)}
+.faq summary{cursor:pointer;padding:20px 40px 20px 0;font-weight:600;font-size:1.05rem;list-style:none;position:relative}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";position:absolute;right:6px;top:16px;font-size:1.5rem;font-weight:400;color:var(--muted);transition:transform .2s}
+.faq details[open] summary::after{transform:rotate(45deg)}
+.faq p{color:var(--muted);margin:0 0 20px}
+/* final */
+.final{background:#070A1C;color:#F2F4F8;text-align:left;position:relative;overflow:hidden}
+.final h2{max-width:16ch}
+.sub-form{display:flex;gap:10px;margin-top:26px;flex-wrap:wrap;max-width:540px}
+.sub-form input{flex:1 1 240px;min-width:0;padding:14px 18px;border-radius:999px;border:1.5px solid #2A3360;background:#0D1330;color:#F2F4F8;font:inherit}
+.sub-form input::placeholder{color:#7E86A6}
+.form-msg{min-height:1.4em;font-size:.9rem;color:#8FA8FF;margin-top:10px}
+footer{padding:44px 0 56px;font-size:.88rem;color:var(--muted);border-top:1px solid var(--line)}
+.foot{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap}
+.foot nav{display:flex;gap:18px;flex-wrap:wrap}
+.disc{margin-top:22px;font-size:.8rem;max-width:90ch}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+</style>
+<script src="orbe-config.js"></script>
+<script src="orbe-auth.js"></script>
+</head>
+<body>
+<a class="skip" href="#main" data-i="skip">Saltar al contenido</a>
+
+<header class="top">
+  <div class="wrap bar">
+    <a class="logo" href="#top" aria-label="orbe"><svg viewBox="0 0 100 110" aria-hidden="true"><path d="M12 106 Q50 95 88 106" fill="none" stroke="currentColor" stroke-width="4.5" stroke-linecap="round"/><path d="M44 98 C44 88 34 82 26 74 A34 34 0 1 1 76.05 71.86" fill="none" stroke="currentColor" stroke-width="8.5" stroke-linecap="round"/><circle cx="62.74" cy="81.52" r="6.4" fill="#FF5A1F"/></svg>orbe</a>
+    <nav class="links" aria-label="Main">
+      <a href="#problema" data-i="nav0">El problema</a><a href="#radar" data-i="nav1">El radar</a><a href="#brief" data-i="nav2">El brief</a><a href="#precios" data-i="nav3">Precios</a><a href="#faq" data-i="nav4">Preguntas</a><a href="#contacto" data-i="nav5">Contacto</a>
+    </nav>
+    <div class="right">
+      <div class="lang" role="group" aria-label="Idioma / Language">
+        <button type="button" data-lang="es">ES</button><button type="button" data-lang="en">EN</button><button type="button" data-lang="pt">PT</button><button type="button" data-lang="fr">FR</button>
+      </div>
+      <button class="theme" type="button" id="themeBtn" aria-label="Tema claro/oscuro"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v3M12 20v3M1 12h3M20 12h3"/></svg></button>
+      <div data-orbe-account></div>
+      <a class="btn primary small" data-link="brief" href="#precios" data-i="ctaShort">Obtener el brief</a>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+<div class="hero" id="top">
+  <svg class="stars" viewBox="0 0 1200 700" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><g id="stars" fill="#F2F4F8"></g><ellipse cx="880" cy="300" rx="560" ry="170" fill="none" stroke="#8FA8FF" stroke-opacity=".14" stroke-dasharray="2 9" transform="rotate(-12 880 300)"/></svg>
+  <div class="wrap hero-in">
+    <div>
+      <h1 data-i="h1">Qué construir cuando el espacio sea barato.</h1>
+      <p class="sub" data-i="sub">Cada negocio orbital tiene un precio de lanzamiento por debajo del cual empieza a ganar dinero. Modelamos 25 y te decimos cuál es ese precio para cada uno.</p>
+      <div class="ctas">
+        <a class="btn primary" data-link="brief" href="#precios" data-i="cta1">Obtener el brief · $39</a>
+        <a class="btn ghost" data-link="radar" href="#radar" data-i="cta2">Probar el radar gratis</a>
+      </div>
+      <div class="proof"><span data-i="proof1"><b>25</b> modelos de negocio</span><span data-i="proof2"><b>4</b> idiomas</span><span data-i="proof3"><b>7 días</b> de reembolso</span></div>
+    </div>
+    <div class="radar" id="radar" aria-label="Radar interactivo">
+      <div class="head"><div class="price" id="price">$7.000<small data-i="perkg"> /kg a órbita</small></div></div>
+      <div class="era" id="era"></div>
+      <label for="slider" class="ticks" style="display:block;color:#A3A9C2;font-size:.85rem;margin-top:8px" data-i="sliderLabel">Mueve el precio de lanzamiento</label>
+      <input type="range" id="slider" min="0" max="1000" value="0" aria-describedby="era">
+      <div class="ticks" id="ticks"></div>
+      <ul class="biz" id="biz"></ul>
+      <div class="count" id="count"></div>
+    </div>
+  </div>
+</div>
+
+
+<section id="problema"><div class="wrap">
+  <div class="kicker" data-i="pbK">El problema</div>
+  <h2 data-i="pbH">Todos ven que el espacio se abarata. Casi nadie sabe qué negocio construir con eso.</h2>
+  <p class="muted" data-i="pbP">El precio de lanzamiento es la variable que decide si un negocio orbital gana o pierde dinero. Pero ese cálculo no existe en un solo lugar: está repartido en papers, hilos y reportes de miles de dólares, casi siempre en inglés técnico.</p>
+  <div class="pstats">
+    <div><b data-i="ps1n">$613.000 M</b><span data-i="ps1">economía espacial global en 2024, +7,8% en un año</span></div>
+    <div><b data-i="ps2n">$1,8 billones</b><span data-i="ps2">proyectados para 2035: crece al doble del ritmo del PIB mundial</span></div>
+    <div><b>20×</b><span data-i="ps3">más barato por kilo: del transbordador ($54.500/kg) al Falcon 9 ($2.720/kg)</span></div>
+    <div><b>100×</b><span data-i="ps4">la siguiente caída que YC pide aprovechar con nuevas startups</span></div>
+  </div>
+  <p class="muted" data-i="pbP2">Pero el precio no baja solo ni en línea recta: el viaje compartido de SpaceX subió de $5.000 a $7.000 por kilo desde 2019. Quien no sabe exactamente qué precio necesita su negocio, apuesta a ciegas.</p>
+  <p class="src" data-i="pbSrc">Fuentes: Space Foundation, The Space Report 2025 Q2 · Foro Económico Mundial y McKinsey (2024) · NASA Ames, H. Jones (2018) · Y Combinator, Requests for Startups · tarifas de rideshare de SpaceX 2019–2026.</p>
+  <div class="pains">
+    <article><span class="pn">1</span><h3 data-i="pb1t">Fundadores sin número</h3><p data-i="pb1d">Ven la oportunidad, pero nadie les dice a qué precio por kilo su idea deja de perder dinero. Llegan a YC o a un inversionista con una intuición, no con un modelo.</p></article>
+    <article><span class="pn">2</span><h3 data-i="pb2t">Inversionistas sin marco</h3><p data-i="pb2d">No pueden evaluar una propuesta espacial sin contratar a un experto. Por eso dicen que no, o dicen que sí sin saber por qué.</p></article>
+    <article><span class="pn">3</span><h3 data-i="pb3t">Información cara o dispersa</h3><p data-i="pb3d">Los reportes serios cuestan miles de dólares y se hacen para gobiernos. Lo gratuito son noticias: te dicen qué pasó, no qué construir.</p></article>
+  </div>
+  <div class="solution"><b data-i="soT">Lo que hace orbe</b><p data-i="soD">Reduce cada negocio orbital a un número: el precio por kilo al que empieza a ganar dinero. Lo exploras gratis en el radar, lo estudias a fondo en el brief y lo validas con tu propia idea en un sprint.</p></div>
+</div></section>
+
+<section id="cambio"><div class="wrap">
+  <div class="kicker" data-i="k1">El cambio</div>
+  <h2 data-i="h2a">El costo de llegar a órbita está por caer otra vez. Esta vez, por órdenes de magnitud.</h2>
+  <p class="muted" data-i="pChange">Y Combinator lo puso en su lista de startups que quiere financiar: negocios que hoy no cierran en una hoja de cálculo, pero cerrarán cuando lanzar sea 100 veces más barato. La pregunta ya no es si va a pasar. Es qué vas a construir cuando pase.</p>
+  <div class="shift">
+    <div><div class="n" id="n1">$7.000</div><p data-i="s1">por kilo en un viaje compartido hoy (Falcon 9 rideshare).</p></div>
+    <div><div class="n" id="n2">&lt;$200</div><p data-i="s2">por kilo es la meta pública de los cohetes totalmente reutilizables.</p></div>
+    <div><div class="n">100×</div><p data-i="s3">de diferencia. Entre esos dos números aparecen industrias enteras.</p></div>
+  </div>
+  <p class="src" data-i="src">Cifras aproximadas a partir de precios públicos y metas declaradas por operadores; cambian con frecuencia. El brief cita cada fuente y fecha.</p>
+</div></section>
+
+<section id="brief" style="background:var(--soft)"><div class="wrap inside">
+  <div>
+    <div class="cover">
+      <div style="display:flex;align-items:center;gap:8px"><svg viewBox="0 0 100 110" width="22" style="color:#F2F4F8"><path d="M12 106 Q50 95 88 106" fill="none" stroke="currentColor" stroke-width="4.5" stroke-linecap="round"/><path d="M44 98 C44 88 34 82 26 74 A34 34 0 1 1 76.05 71.86" fill="none" stroke="currentColor" stroke-width="8.5" stroke-linecap="round"/><circle cx="62.74" cy="81.52" r="6.4" fill="#FF5A1F"/></svg><b>orbe brief</b></div>
+      <h3 data-i="coverT">25 negocios que el espacio barato hará posibles</h3>
+      <div style="font-size:.82rem;color:#A3A9C2" data-i="coverS">PDF · 40 páginas · modelo editable</div>
+    </div>
+  </div>
+  <div>
+    <div class="kicker" data-i="k2">El brief</div>
+    <h2 data-i="h2b">Todo lo que necesitas para elegir tu negocio orbital, con números.</h2>
+    <ul class="toc-list">
+      <li><i>25</i><div><b data-i="i1t">Modelos de negocio</b><span data-i="i1d">De fibra óptica en microgravedad a datos satelitales para el agricultor. Cada uno con mercado, cliente y riesgo principal.</span></div></li>
+      <li><i>$/kg</i><div><b data-i="i2t">Precio de equilibrio por caso</b><span data-i="i2d">El precio de lanzamiento al que cada negocio deja de perder dinero, y cuántos años faltan según las proyecciones públicas.</span></div></li>
+      <li><i>xls</i><div><b data-i="i3t">Modelo editable</b><span data-i="i3d">Una hoja de cálculo para cambiar los supuestos y probar tu propia idea en minutos.</span></div></li>
+      <li><i>+1</i><div><b data-i="i4t">Acceso al radar</b><span data-i="i4d">La versión completa del radar web con los 25 casos desbloqueados y actualizaciones trimestrales.</span></div></li>
+    </ul>
+  </div>
+</div></section>
+
+
+<section id="ejemplo" class="dark"><div class="wrap inside">
+  <div>
+    <div class="kicker" data-i="exK">Un caso, gratis</div>
+    <h2 data-i="exH">Fibra óptica fabricada en órbita.</h2>
+    <p class="muted" data-i="exP">En microgravedad, la fibra ZBLAN se forma sin los defectos que la arruinan en tierra y pierde mucha menos señal. El negocio es claro. La pregunta es cuándo cierran los números.</p>
+    <p class="muted small-note" data-i="exA">Supuestos del modelo: 100 kg en órbita por lote, $600.000 de ingreso y $350.000 de costos sin contar el lanzamiento.</p>
+  </div>
+  <div class="ex-rows">
+    <div class="ex"><span data-i="ex1">Hoy, viaje compartido</span><b class="neg" id="ex1v"></b><small id="ex1p"></small></div>
+    <div class="ex hot"><span data-i="ex2">Punto de equilibrio</span><b id="ex2v"></b><small id="ex2p"></small></div>
+    <div class="ex"><span data-i="ex3">Meta de Starship</span><b class="pos" id="ex3v"></b><small id="ex3p"></small></div>
+    <a class="btn primary" data-link="radar" href="#radar" data-i="exCta" style="margin-top:8px">Ver los otros casos en el radar</a>
+  </div>
+</div></section>
+
+<section id="para"><div class="wrap">
+  <div class="kicker" data-i="k3">Para quién</div>
+  <h2 data-i="h2c">Hecho para quienes van a decidir qué se construye.</h2>
+  <div class="for">
+    <article><h3 data-i="f1t">Fundadores deep-tech</h3><p data-i="f1d">Buscas tu próxima idea y quieres llegar a la aplicación de YC con una tesis que se sostiene con números.</p></article>
+    <article><h3 data-i="f2t">Inversionistas</h3><p data-i="f2d">Quieres entender la tesis espacial sin volverte ingeniero: memos de una página, supuestos visibles.</p></article>
+    <article><h3 data-i="f3t">Ingenieros aeroespaciales</h3><p data-i="f3d">Tienes la formación técnica. Te falta saber dónde está el negocio.</p></article>
+    <article><h3 data-i="f4t">Equipos de innovación</h3><p data-i="f4d">Minería, agro, telecom o seguros: evalúas datos satelitales y necesitas un mapa antes de comprar.</p></article>
+  </div>
+</div></section>
+
+<section id="como" style="background:var(--soft)"><div class="wrap">
+  <div class="kicker" data-i="k4">Cómo funciona</div>
+  <h2 data-i="h2d">De la curiosidad a una decisión en una tarde.</h2>
+  <div class="steps"><ol>
+    <li><div class="s">1</div><h3 data-i="st1t">Explora el radar</h3><p class="muted" data-i="st1d">Mueve el precio de lanzamiento y mira qué negocios se encienden. Gratis, sin registro.</p></li>
+    <li><div class="s">2</div><h3 data-i="st2t">Lee el brief</h3><p class="muted" data-i="st2d">Recibes el PDF y el modelo en tu correo segundos después del pago.</p></li>
+    <li><div class="s">3</div><h3 data-i="st3t">Valida tu idea</h3><p class="muted" data-i="st3d">Cambia los supuestos en el modelo o agenda un sprint de 90 minutos con nosotros.</p></li>
+  </ol></div>
+</div></section>
+
+
+<section id="despues"><div class="wrap">
+  <div class="kicker" data-i="afK">Después de pagar</div>
+  <h2 data-i="afH">Pagas una vez y en dos minutos tienes todo.</h2>
+  <div class="steps"><ol>
+    <li><div class="s">1</div><h3 data-i="af1t">Pagas en Polar</h3><p class="muted" data-i="af1d">Checkout seguro con tarjeta. Polar calcula y cobra los impuestos de tu país.</p></li>
+    <li><div class="s">2</div><h3 data-i="af2t">Te llega un correo</h3><p class="muted" data-i="af2d">Con el PDF, la hoja de cálculo y tu código de acceso. También quedan en tu portal de cliente de Polar.</p></li>
+    <li><div class="s">3</div><h3 data-i="af3t">Vuelves al radar</h3><p class="muted" data-i="af3d">Polar te redirige solo. Pegas el código una vez y los 25 casos quedan desbloqueados.</p></li>
+  </ol></div>
+</div></section>
+<section id="testimonios" hidden><div class="wrap">
+  <div class="kicker" data-i="tsK">Lo que dicen</div>
+  <div class="quotes" id="quotes"></div>
+</div></section>
+
+<section id="precios" class="dark"><div class="wrap">
+  <div class="kicker" data-i="k5">Precios</div>
+  <h2 data-i="h2e">Empieza por el brief. Sube de nivel cuando lo necesites.</h2>
+  <div class="plans">
+    <div class="plan main">
+      <span class="badge" data-i="badge">Precio fundador</span>
+      <h3 data-i="p1t">orbe brief</h3>
+      <div class="amt">$39 <small data-i="once">pago único</small></div>
+      <ul><li data-i="p1a">PDF de 40 páginas, 25 modelos</li><li data-i="p1b">Hoja de cálculo editable</li><li data-i="p1c">Radar completo desbloqueado</li><li data-i="p1d">Actualizaciones trimestrales</li></ul>
+      <a class="btn primary" data-link="brief" href="#" data-i="p1cta">Comprar el brief</a>
+    </div>
+    <div class="plan">
+      <h3 data-i="p2t">orbe sprint</h3>
+      <div class="amt">$149 <small data-i="session">por sesión</small></div>
+      <ul><li data-i="p2a">90 minutos en vivo</li><li data-i="p2b">Tu idea pasada por el modelo</li><li data-i="p2c">Entregable con números y riesgos</li><li data-i="p2d">Incluye el brief</li></ul>
+      <a class="btn dark-ghost" data-link="sprint" href="#" data-i="p2cta">Reservar sprint</a>
+    </div>
+    <div class="plan">
+      <h3 data-i="p3t">orbe radar pro</h3>
+      <div class="amt">$15 <small data-i="month">/ mes</small></div>
+      <ul><li data-i="p3a">Radar actualizado cada semana</li><li data-i="p3b">Base de datos de lanzamientos</li><li data-i="p3c">Comunidad privada</li></ul>
+      <a class="btn dark-ghost" data-link="waitlist" href="#suscribir" data-i="p3cta">Unirme a la lista</a>
+    </div>
+  </div>
+  <p class="regional" data-i="regional">¿Estás en Latinoamérica, África o Sudeste Asiático? Usa el código LATAM en el checkout y paga $19 por el brief. Precios en dólares, impuestos incluidos.</p>
+  <div class="corp"><div><b data-i="corpT">Briefing para empresas · $1.500</b><p class="muted" style="margin:4px 0 0" data-i="corpD">Sesión privada para tu equipo de innovación con casos de tu industria.</p></div><a class="btn dark-ghost small" data-link="corp" href="#" data-i="corpCta">Escribir para agendar</a></div>
+</div></section>
+
+<section id="fundador"><div class="wrap founder">
+  <div class="portrait" aria-hidden="true">MA</div>
+  <div>
+    <blockquote data-i="quote">“El cuello de botella ya no será el cohete. Será saber qué subir.”</blockquote>
+    <p><b>Michell Anyosa</b> · <span class="muted" data-i="role">Fundador de orbe. Escribe para más de 45.000 lectores en LinkedIn y Substack sobre startups y tecnología.</span></p>
+  </div>
+</div></section>
+
+<section id="faq" style="background:var(--soft)"><div class="wrap">
+  <div class="kicker" data-i="k6">Preguntas</div>
+  <h2 data-i="h2f">Lo que suelen preguntarnos.</h2>
+  <div class="faq" id="faqList"></div>
+  <form class="qform" id="qForm" novalidate>
+    <b data-i="qT">¿No encontraste tu respuesta? Pregúntanos.</b>
+    <div class="qrow">
+      <input type="email" id="qEmail" required autocomplete="email" data-ip="emailPh" aria-label="Email" maxlength="200">
+      <input type="text" id="qText" required data-ip="qPh" aria-label="Pregunta" maxlength="1000">
+      <button class="btn primary" type="submit" data-i="qBtn">Enviar pregunta</button>
+    </div>
+    <div class="fmsg" id="qMsg" role="status"></div>
+  </form>
+</div></section>
+
+<section id="contacto"><div class="wrap contact">
+  <div>
+    <div class="kicker" data-i="ctK">Contacto</div>
+    <h2 data-i="ctH">Hablemos de tu idea, tu fondo o tu empresa.</h2>
+    <p class="muted" data-i="ctP">Respondemos en menos de 24 horas hábiles. Para empresas, la primera llamada de 30 minutos no tiene costo.</p>
+    <a class="btn ghost" data-link="corp" href="#contacto" data-i="ctCal">Agendar llamada de 30 min</a>
+  </div>
+  <form class="cform" id="cForm" novalidate>
+    <div class="two"><label><span data-i="fName">Nombre</span><input id="cName" required maxlength="120" autocomplete="name"></label>
+    <label><span data-i="fEmail">Correo</span><input id="cEmail" type="email" required maxlength="200" autocomplete="email"></label></div>
+    <div class="two"><label><span data-i="fCompany">Empresa o universidad</span><input id="cCompany" maxlength="160" autocomplete="organization"></label>
+    <label><span data-i="fCountry">País</span><input id="cCountry" maxlength="80" autocomplete="country-name"></label></div>
+    <label><span data-i="fType">Me interesa</span><select id="cType"></select></label>
+    <label><span data-i="fMsg">Mensaje</span><textarea id="cMsg" rows="5" required maxlength="4000"></textarea></label>
+    <label class="consent"><input type="checkbox" id="cOk" required> <span data-i="fConsent">Acepto que orbe use estos datos para responderme, según la Política de privacidad.</span></label>
+    <button class="btn primary" type="submit" data-i="fSend">Enviar mensaje</button>
+    <div class="fmsg" id="cMsgOut" role="status"></div>
+  </form>
+</div></section>
+
+<section id="suscribir" class="final">
+  <div class="wrap">
+    <h2 data-i="h2g">Un caso orbital nuevo cada semana. Gratis.</h2>
+    <p style="color:#B9BFD6" data-i="pg">Recibe el radar en tu correo: un negocio, su precio de equilibrio y lo que cambió esa semana.</p>
+    <form class="sub-form" id="subForm" method="post" target="_blank">
+      <label for="email" class="skip" data-i="emailLbl">Tu correo</label>
+      <input type="email" id="email" name="email" required autocomplete="email" placeholder="tu@correo.com" data-ip="emailPh">
+      <button class="btn primary" type="submit" data-i="subCta">Suscribirme gratis</button>
+    </form>
+    <div class="form-msg" id="formMsg" role="status"></div>
+  </div>
+</section>
+</main>
+
+<footer><div class="wrap">
+  <div class="foot">
+    <a class="logo" href="#top" style="font-size:1.3rem"><svg viewBox="0 0 100 110" aria-hidden="true"><path d="M12 106 Q50 95 88 106" fill="none" stroke="currentColor" stroke-width="4.5" stroke-linecap="round"/><path d="M44 98 C44 88 34 82 26 74 A34 34 0 1 1 76.05 71.86" fill="none" stroke="currentColor" stroke-width="8.5" stroke-linecap="round"/><circle cx="62.74" cy="81.52" r="6.4" fill="#FF5A1F"/></svg>orbe</a>
+    <nav aria-label="Footer"><a data-link="substack" href="#" >Substack</a><a data-link="linkedin" href="#">LinkedIn</a><a data-link="x" href="#">X</a><a data-link="instagram" href="#">Instagram</a><a data-link="tiktok" href="#">TikTok</a><a href="#contacto" data-link="email" id="footMail" data-i="nav5">Contacto</a></nav>
+  </div>
+  <nav class="legal" aria-label="Legal"><a href="legal.html#terminos" data-i="lgT">Términos y condiciones</a><a href="legal.html#privacidad" data-i="lgP">Privacidad</a><a href="legal.html#ia" data-i="lgA">Uso de IA y regulación</a><a href="legal.html#reembolsos" data-i="lgR">Reembolsos</a><a href="legal.html#cookies" data-i="lgC">Cookies</a></nav>
+  <p class="disc" data-i="disc">orbe es un producto educativo y de investigación. Nada de este sitio es asesoría de inversión ni recomendación para comprar valores. Las cifras son estimaciones con supuestos visibles. Pagos procesados por Polar como Merchant of Record. © 2026 orbe LLC.</p>
+</div></footer>
+
+<script>
+/* ====== CONFIGURA AQUÍ TUS ENLACES (sin tocar nada más) ====== */
+const C = window.ORBE_CONFIG || {};
+const LINKS = {
+  brief:   "",                        // se arma en el clic con orbe.checkoutUrl() (Polar)
+  sprint:  "",
+  corp:    C.calBriefing || "#contacto",
+  waitlist:"#suscribir",
+  radar:   "radar.html",
+  substack:C.substack || "",
+  linkedin:(C.social||{}).linkedin||"", x:(C.social||{}).x||"", instagram:(C.social||{}).instagram||"", tiktok:(C.social||{}).tiktok||"",
+  email:   "#contacto"
+};
+const SUBSTACK = C.substack || "";
+// Testimonios reales: agrégalos aquí cuando los tengas. Vacío = la sección no se muestra.
+const TESTIMONIALS = [
+  // {name:"Nombre Apellido", role:"Cargo, Empresa", text:{es:"…",en:"…",pt:"…",fr:"…"}}
+]; // el formulario envía el correo directo a tu lista de Substack
+/* ============================================================== */
+
+const CASES=[
+ {k:"zblan",be:2500,n:{es:"Fibra óptica en órbita",en:"In-orbit optical fiber",pt:"Fibra óptica em órbita",fr:"Fibre optique en orbite"}},
+ {k:"pharma",be:3500,n:{es:"Fármacos en microgravedad",en:"Microgravity drug formulation",pt:"Fármacos em microgravidade",fr:"Médicaments en microgravité"}},
+ {k:"agro",be:1200,n:{es:"Satélites para agro pyme",en:"Satellites for small farms",pt:"Satélites para o pequeno agro",fr:"Satellites pour petites fermes"}},
+ {k:"tug",be:1000,n:{es:"Remolcadores orbitales",en:"Orbital tugs",pt:"Rebocadores orbitais",fr:"Remorqueurs orbitaux"}},
+ {k:"fuel",be:600,n:{es:"Combustible en órbita",en:"In-orbit refueling",pt:"Combustível em órbita",fr:"Ravitaillement en orbite"}},
+ {k:"debris",be:400,n:{es:"Limpieza de basura espacial",en:"Space debris removal",pt:"Limpeza de lixo espacial",fr:"Nettoyage des débris"}},
+ {k:"dc",be:150,n:{es:"Centros de datos orbitales",en:"Orbital data centers",pt:"Data centers orbitais",fr:"Centres de données orbitaux"}},
+ {k:"sbsp",be:30,n:{es:"Energía solar desde el espacio",en:"Space-based solar power",pt:"Energia solar do espaço",fr:"Énergie solaire spatiale"}}
+];
+
+const T={
+es:{nav5:"Contacto",qT:"¿No encontraste tu respuesta? Pregúntanos.",qPh:"Escribe tu pregunta",qBtn:"Enviar pregunta",ctK:"Contacto",ctH:"Hablemos de tu idea, tu fondo o tu empresa.",ctP:"Respondemos en menos de 24 horas hábiles. Para empresas, la primera llamada de 30 minutos no tiene costo.",ctCal:"Agendar llamada de 30 min",fName:"Nombre",fEmail:"Correo",fCompany:"Empresa o universidad",fCountry:"País",fType:"Me interesa",fMsg:"Mensaje",fConsent:"Acepto que orbe use estos datos para responderme, según la Política de privacidad.",fSend:"Enviar mensaje",fOk:"Recibido. Te respondemos en menos de 24 horas hábiles.",fErr:"No se pudo enviar. Escríbenos por correo o inténtalo de nuevo.",fNeed:"Completa nombre, correo válido, mensaje y acepta la política.",qOk:"Gracias. Te respondemos por correo.",lgT:"Términos y condiciones",lgP:"Privacidad",lgA:"Uso de IA y regulación",lgR:"Reembolsos",lgC:"Cookies",subOk2:"Listo, te sumamos a la lista.",types:["El orbe brief", "Un orbe sprint", "Briefing para mi empresa", "Alianza o universidad", "Prensa", "Otro"],ps1n:"$613.000 M",ps1:"economía espacial global en 2024, +7,8% en un año",ps2n:"$1,8 billones",ps2:"proyectados para 2035: crece al doble del ritmo del PIB mundial",ps3:"más barato por kilo: del transbordador ($54.500/kg) al Falcon 9 ($2.720/kg)",ps4:"la siguiente caída que YC pide aprovechar con nuevas startups",pbP2:"Pero el precio no baja solo ni en línea recta: el viaje compartido de SpaceX subió de $5.000 a $7.000 por kilo desde 2019. Quien no sabe exactamente qué precio necesita su negocio, apuesta a ciegas.",pbSrc:"Fuentes: Space Foundation, The Space Report 2025 Q2 · Foro Económico Mundial y McKinsey (2024) · NASA Ames, H. Jones (2018) · Y Combinator, Requests for Startups · tarifas de rideshare de SpaceX 2019–2026.",nav0:"El problema",pbK:"El problema",pbH:"Todos ven que el espacio se abarata. Casi nadie sabe qué negocio construir con eso.",pbP:"El precio de lanzamiento es la variable que decide si un negocio orbital gana o pierde dinero. Pero ese cálculo no existe en un solo lugar: está repartido en papers, hilos y reportes de miles de dólares, casi siempre en inglés técnico.",pb1t:"Fundadores sin número",pb1d:"Ven la oportunidad, pero nadie les dice a qué precio por kilo su idea deja de perder dinero. Llegan a YC o a un inversionista con una intuición, no con un modelo.",pb2t:"Inversionistas sin marco",pb2d:"No pueden evaluar una propuesta espacial sin contratar a un experto. Por eso dicen que no, o dicen que sí sin saber por qué.",pb3t:"Información cara o dispersa",pb3d:"Los reportes serios cuestan miles de dólares y se hacen para gobiernos. Lo gratuito son noticias: te dicen qué pasó, no qué construir.",soT:"Lo que hace orbe",soD:"Reduce cada negocio orbital a un número: el precio por kilo al que empieza a ganar dinero. Lo exploras gratis en el radar, lo estudias a fondo en el brief y lo validas con tu propia idea en un sprint.",exK:"Un caso, gratis",exH:"Fibra óptica fabricada en órbita.",exP:"En microgravedad, la fibra ZBLAN se forma sin los defectos que la arruinan en tierra y pierde mucha menos señal. El negocio es claro. La pregunta es cuándo cierran los números.",exA:"Supuestos del modelo: 100 kg en órbita por lote, $600.000 de ingreso y $350.000 de costos sin contar el lanzamiento.",ex1:"Hoy, viaje compartido",ex2:"Punto de equilibrio",ex3:"Meta de Starship",exCta:"Ver los otros casos en el radar",exLoss:"pierde por lote",exWin:"gana por lote",exBe:"aquí deja de perder",afK:"Después de pagar",afH:"Pagas una vez y en dos minutos tienes todo.",af1t:"Pagas en Polar",af1d:"Checkout seguro con tarjeta. Polar calcula y cobra los impuestos de tu país.",af2t:"Te llega un correo",af2d:"Con el PDF, la hoja de cálculo y tu código de acceso. También quedan en tu portal de cliente de Polar.",af3t:"Vuelves al radar",af3d:"Polar te redirige solo. Pegas el código una vez y los 25 casos quedan desbloqueados.",tsK:"Lo que dicen",skip:"Saltar al contenido",nav1:"El radar",nav2:"El brief",nav3:"Precios",nav4:"Preguntas",ctaShort:"Obtener el brief",h1:"Qué construir cuando el espacio sea barato.",sub:"Cada negocio orbital tiene un precio de lanzamiento por debajo del cual empieza a ganar dinero. Modelamos 25 y te decimos cuál es ese precio para cada uno.",cta1:"Obtener el brief · $39",cta2:"Abrir el radar completo",proof1:"<b>25</b> modelos de negocio",proof2:"<b>4</b> idiomas",proof3:"<b>7 días</b> de reembolso",perkg:" /kg a órbita",sliderLabel:"Mueve el precio de lanzamiento",
+count:(n,t)=>`<b>${n} de ${t}</b> negocios ganan dinero a este precio.`,eras:["Hoy: viaje compartido en Falcon 9","Falcon 9 dedicado y Falcon Heavy","Primeros vuelos de cohetes reutilizables pesados","Meta pública de Starship","Escenario de largo plazo"],
+k1:"El cambio",h2a:"El costo de llegar a órbita está por caer otra vez. Esta vez, por órdenes de magnitud.",pChange:"Y Combinator lo puso en su lista de startups que quiere financiar: negocios que hoy no cierran en una hoja de cálculo, pero cerrarán cuando lanzar sea 100 veces más barato. La pregunta ya no es si va a pasar. Es qué vas a construir cuando pase.",s1:"por kilo en un viaje compartido hoy (Falcon 9 rideshare).",s2:"por kilo es la meta pública de los cohetes totalmente reutilizables.",s3:"de diferencia. Entre esos dos números aparecen industrias enteras.",src:"Cifras aproximadas a partir de precios públicos y metas declaradas por operadores; cambian con frecuencia. El brief cita cada fuente y fecha.",
+coverT:"25 negocios que el espacio barato hará posibles",coverS:"PDF · 40 páginas · modelo editable",k2:"El brief",h2b:"Todo lo que necesitas para elegir tu negocio orbital, con números.",i1t:"Modelos de negocio",i1d:"De fibra óptica en microgravedad a datos satelitales para el agricultor. Cada uno con mercado, cliente y riesgo principal.",i2t:"Precio de equilibrio por caso",i2d:"El precio de lanzamiento al que cada negocio deja de perder dinero, y cuántos años faltan según las proyecciones públicas.",i3t:"Modelo editable",i3d:"Una hoja de cálculo para cambiar los supuestos y probar tu propia idea en minutos.",i4t:"Acceso al radar",i4d:"La versión completa del radar web con los 25 casos desbloqueados y actualizaciones trimestrales.",
+k3:"Para quién",h2c:"Hecho para quienes van a decidir qué se construye.",f1t:"Fundadores deep-tech",f1d:"Buscas tu próxima idea y quieres llegar a la aplicación de YC con una tesis que se sostiene con números.",f2t:"Inversionistas",f2d:"Quieres entender la tesis espacial sin volverte ingeniero: memos de una página, supuestos visibles.",f3t:"Ingenieros aeroespaciales",f3d:"Tienes la formación técnica. Te falta saber dónde está el negocio.",f4t:"Equipos de innovación",f4d:"Minería, agro, telecom o seguros: evalúas datos satelitales y necesitas un mapa antes de comprar.",
+k4:"Cómo funciona",h2d:"De la curiosidad a una decisión en una tarde.",st1t:"Explora el radar",st1d:"Mueve el precio de lanzamiento y mira qué negocios se encienden. Gratis, sin registro.",st2t:"Lee el brief",st2d:"Recibes el PDF y el modelo en tu correo segundos después del pago.",st3t:"Valida tu idea",st3d:"Cambia los supuestos en el modelo o agenda un sprint de 90 minutos con nosotros.",
+k5:"Precios",h2e:"Empieza por el brief. Sube de nivel cuando lo necesites.",badge:"Precio fundador",p1t:"orbe brief",once:"pago único",p1a:"PDF de 40 páginas, 25 modelos",p1b:"Hoja de cálculo editable",p1c:"Radar completo desbloqueado",p1d:"Actualizaciones trimestrales",p1cta:"Comprar el brief",p2t:"orbe sprint",session:"por sesión",p2a:"90 minutos en vivo",p2b:"Tu idea pasada por el modelo",p2c:"Entregable con números y riesgos",p2d:"Incluye el brief",p2cta:"Reservar sprint",p3t:"orbe radar pro",month:"/ mes",p3a:"Radar actualizado cada semana",p3b:"Base de datos de lanzamientos",p3c:"Comunidad privada",p3cta:"Unirme a la lista",regional:"¿Estás en Latinoamérica, África o Sudeste Asiático? Usa el código LATAM en el checkout y paga $19 por el brief. Precios en dólares.",corpT:"Briefing para empresas · $1.500",corpD:"Sesión privada para tu equipo de innovación con casos de tu industria.",corpCta:"Escribir para agendar",
+quote:"“El cuello de botella ya no será el cohete. Será saber qué subir.”",role:"Fundador de orbe. Escribe para más de 45.000 lectores en LinkedIn y Substack sobre startups y tecnología.",k6:"Preguntas",h2f:"Lo que suelen preguntarnos.",
+faq:[["¿Necesito crear una cuenta?", "Para usar el radar gratis, no. Para el acceso completo, sí: crea tu cuenta con el mismo correo con el que pagaste o entra con Google, y se activa sola."],["¿Necesito saber de ingeniería?","No. Cada caso se explica en lenguaje de negocio. Los detalles técnicos están en anexos para quien los quiera."],["¿En qué idiomas está?","Español, inglés, portugués y francés. Al comprar recibes las cuatro versiones."],["¿Cómo recibo el brief?","Polar te envía el PDF y el enlace al modelo a tu correo apenas se confirma el pago."],["¿Es asesoría de inversión?","No. Es un análisis educativo con supuestos visibles. No recomendamos comprar ni vender valores."],["¿Puedo pedir reembolso?","Sí, dentro de 7 días si el brief no te sirve. Escríbenos y lo procesamos."],["¿Qué pasa cuando cambien los precios de lanzamiento?","El radar y el modelo se actualizan cada trimestre. Las actualizaciones están incluidas."]],
+h2g:"Un caso orbital nuevo cada semana. Gratis.",pg:"Recibe el radar en tu correo: un negocio, su precio de equilibrio y lo que cambió esa semana.",emailLbl:"Tu correo",emailPh:"tu@correo.com",subCta:"Suscribirme gratis",subOk:"Listo. Revisa tu correo para confirmar la suscripción en Substack.",disc:"orbe es un producto educativo y de investigación. Nada de este sitio es asesoría de inversión ni recomendación para comprar valores. Las cifras son estimaciones con supuestos visibles. Pagos procesados por Polar como Merchant of Record. © 2026 orbe LLC.",title:"orbe · Qué construir cuando el espacio sea barato"},
+en:{nav5:"Contact",qT:"Didn’t find your answer? Ask us.",qPh:"Type your question",qBtn:"Send question",ctK:"Contact",ctH:"Let’s talk about your idea, your fund or your company.",ctP:"We reply within 24 business hours. For companies, the first 30-minute call is free.",ctCal:"Book a 30-min call",fName:"Name",fEmail:"Email",fCompany:"Company or university",fCountry:"Country",fType:"I’m interested in",fMsg:"Message",fConsent:"I agree that orbe may use this data to reply to me, under the Privacy Policy.",fSend:"Send message",fOk:"Received. We’ll reply within 24 business hours.",fErr:"Couldn’t send. Email us or try again.",fNeed:"Fill in name, a valid email, a message and accept the policy.",qOk:"Thanks. We’ll reply by email.",lgT:"Terms and conditions",lgP:"Privacy",lgA:"AI use and regulation",lgR:"Refunds",lgC:"Cookies",subOk2:"Done, you’re on the list.",types:["The orbe brief", "An orbe sprint", "A briefing for my company", "Partnership or university", "Press", "Other"],ps1n:"$613B",ps1:"global space economy in 2024, up 7.8% in one year",ps2n:"$1.8T",ps2:"projected by 2035: growing twice as fast as global GDP",ps3:"cheaper per kilo: from the Shuttle ($54,500/kg) to Falcon 9 ($2,720/kg)",ps4:"the next drop YC is asking new startups to build for",pbP2:"But prices don’t fall on their own or in a straight line: SpaceX rideshare went from $5,000 to $7,000 per kilo since 2019. If you don’t know the exact price your business needs, you’re betting blind.",pbSrc:"Sources: Space Foundation, The Space Report 2025 Q2 · World Economic Forum & McKinsey (2024) · NASA Ames, H. Jones (2018) · Y Combinator, Requests for Startups · SpaceX rideshare pricing 2019–2026.",nav0:"The problem",pbK:"The problem",pbH:"Everyone sees space getting cheaper. Almost nobody knows what business to build with it.",pbP:"Launch price is the variable that decides whether an orbital business makes or loses money. But that math doesn’t live in one place: it’s scattered across papers, threads and reports that cost thousands of dollars, usually in dense technical English.",pb1t:"Founders without a number",pb1d:"They see the opportunity, but nobody tells them the price per kilo at which their idea stops losing money. They pitch YC or an investor with a hunch, not a model.",pb2t:"Investors without a framework",pb2d:"They can’t evaluate a space pitch without hiring an expert. So they say no, or say yes without knowing why.",pb3t:"Expensive or scattered information",pb3d:"Serious reports cost thousands and are written for governments. The free stuff is news: it tells you what happened, not what to build.",soT:"What orbe does",soD:"It reduces every orbital business to one number: the price per kilo at which it starts making money. Explore it free in the radar, study it in the brief, and test your own idea in a sprint.",exK:"One case, free",exH:"Optical fiber made in orbit.",exP:"In microgravity, ZBLAN fiber forms without the defects that ruin it on Earth, and loses far less signal. The business is obvious. The question is when the numbers work.",exA:"Model assumptions: 100 kg to orbit per batch, $600,000 revenue and $350,000 in costs before launch.",ex1:"Today, rideshare",ex2:"Break-even point",ex3:"Starship target",exCta:"See the other cases in the radar",exLoss:"loss per batch",exWin:"profit per batch",exBe:"where losses stop",afK:"After you pay",afH:"Pay once and have everything in two minutes.",af1t:"Pay on Polar",af1d:"Secure card checkout. Polar calculates and collects your local taxes.",af2t:"Get an email",af2d:"With the PDF, the spreadsheet and your access code. They also stay in your Polar customer portal.",af3t:"Back to the radar",af3d:"Polar redirects you automatically. Paste the code once and all 25 cases unlock.",tsK:"What people say",skip:"Skip to content",nav1:"The radar",nav2:"The brief",nav3:"Pricing",nav4:"FAQ",ctaShort:"Get the brief",h1:"What to build when space gets cheap.",sub:"Every orbital business has a launch price below which it starts making money. We modeled 25 of them and tell you that price for each one.",cta1:"Get the brief · $39",cta2:"Open the full radar",proof1:"<b>25</b> business models",proof2:"<b>4</b> languages",proof3:"<b>7-day</b> refund",perkg:" /kg to orbit",sliderLabel:"Move the launch price",
+count:(n,t)=>`<b>${n} of ${t}</b> businesses make money at this price.`,eras:["Today: Falcon 9 rideshare","Dedicated Falcon 9 and Falcon Heavy","First heavy reusable rockets","Starship's public target","Long-term scenario"],
+k1:"The shift",h2a:"The cost of reaching orbit is about to fall again. This time by orders of magnitude.",pChange:"Y Combinator put it on its list of startups it wants to fund: businesses that don't work in a spreadsheet today, but will when launch is 100× cheaper. The question is no longer whether it happens. It's what you'll build when it does.",s1:"per kilo on a rideshare today (Falcon 9 rideshare).",s2:"per kilo is the public target for fully reusable rockets.",s3:"apart. Whole industries appear between those two numbers.",src:"Approximate figures based on public prices and operator targets; they change often. The brief cites every source and date.",
+coverT:"25 businesses cheap space will make possible",coverS:"PDF · 40 pages · editable model",k2:"The brief",h2b:"Everything you need to pick your orbital business, with numbers.",i1t:"Business models",i1d:"From microgravity fiber to satellite data for farmers. Each with market, customer and main risk.",i2t:"Break-even price per case",i2d:"The launch price at which each business stops losing money, and how many years away it is based on public projections.",i3t:"Editable model",i3d:"A spreadsheet to change the assumptions and test your own idea in minutes.",i4t:"Radar access",i4d:"The full web radar with all 25 cases unlocked and quarterly updates.",
+k3:"Who it's for",h2c:"Made for the people who decide what gets built.",f1t:"Deep-tech founders",f1d:"You're looking for your next idea and want to apply to YC with a thesis that holds up in numbers.",f2t:"Investors",f2d:"You want the space thesis without becoming an engineer: one-page memos, visible assumptions.",f3t:"Aerospace engineers",f3d:"You have the technical training. You're missing where the business is.",f4t:"Innovation teams",f4d:"Mining, agri, telecom or insurance: you're evaluating satellite data and need a map before you buy.",
+k4:"How it works",h2d:"From curiosity to a decision in one afternoon.",st1t:"Explore the radar",st1d:"Move the launch price and see which businesses light up. Free, no sign-up.",st2t:"Read the brief",st2d:"The PDF and model land in your inbox seconds after payment.",st3t:"Validate your idea",st3d:"Change the assumptions in the model or book a 90-minute sprint with us.",
+k5:"Pricing",h2e:"Start with the brief. Level up when you need to.",badge:"Founding price",p1t:"orbe brief",once:"one-time",p1a:"40-page PDF, 25 models",p1b:"Editable spreadsheet",p1c:"Full radar unlocked",p1d:"Quarterly updates",p1cta:"Buy the brief",p2t:"orbe sprint",session:"per session",p2a:"90 minutes live",p2b:"Your idea run through the model",p2c:"Deliverable with numbers and risks",p2d:"Brief included",p2cta:"Book a sprint",p3t:"orbe radar pro",month:"/ month",p3a:"Radar updated weekly",p3b:"Launch database",p3c:"Private community",p3cta:"Join the waitlist",regional:"In Latin America, Africa or Southeast Asia? Use code LATAM at checkout and pay $19 for the brief. Prices in USD.",corpT:"Company briefing · $1,500",corpD:"A private session for your innovation team with cases from your industry.",corpCta:"Email to schedule",
+quote:"“The bottleneck won't be the rocket. It will be knowing what to launch.”",role:"Founder of orbe. Writes about startups and technology for 45,000+ readers on LinkedIn and Substack.",k6:"FAQ",h2f:"What people usually ask.",
+faq:[["Do I need an account?", "Not to use the free radar. For full access, yes: sign up with the same email you paid with, or use Google, and it turns on automatically."],["Do I need an engineering background?","No. Every case is explained in business language. Technical details are in appendices for those who want them."],["Which languages?","Spanish, English, Portuguese and French. You get all four versions."],["How do I receive the brief?","Polar emails you the PDF and the model link as soon as payment clears."],["Is this investment advice?","No. It's educational analysis with visible assumptions. We don't recommend buying or selling securities."],["Can I get a refund?","Yes, within 7 days if the brief isn't useful. Email us and we'll process it."],["What happens when launch prices change?","The radar and model are updated every quarter. Updates are included."]],
+h2g:"A new orbital case every week. Free.",pg:"Get the radar in your inbox: one business, its break-even price and what changed this week.",emailLbl:"Your email",emailPh:"you@email.com",subCta:"Subscribe for free",subOk:"Done. Check your inbox to confirm your Substack subscription.",disc:"orbe is an educational and research product. Nothing on this site is investment advice or a recommendation to buy securities. Figures are estimates with visible assumptions. Payments processed by Polar as Merchant of Record. © 2026 orbe LLC.",title:"orbe · What to build when space gets cheap"},
+pt:{nav5:"Contato",qT:"Não encontrou sua resposta? Pergunte.",qPh:"Escreva sua pergunta",qBtn:"Enviar pergunta",ctK:"Contato",ctH:"Vamos falar da sua ideia, do seu fundo ou da sua empresa.",ctP:"Respondemos em até 24 horas úteis. Para empresas, a primeira conversa de 30 minutos é gratuita.",ctCal:"Agendar conversa de 30 min",fName:"Nome",fEmail:"E-mail",fCompany:"Empresa ou universidade",fCountry:"País",fType:"Tenho interesse em",fMsg:"Mensagem",fConsent:"Aceito que a orbe use estes dados para me responder, conforme a Política de privacidade.",fSend:"Enviar mensagem",fOk:"Recebido. Respondemos em até 24 horas úteis.",fErr:"Não foi possível enviar. Escreva por e-mail ou tente de novo.",fNeed:"Preencha nome, e-mail válido, mensagem e aceite a política.",qOk:"Obrigado. Respondemos por e-mail.",lgT:"Termos e condições",lgP:"Privacidade",lgA:"Uso de IA e regulação",lgR:"Reembolsos",lgC:"Cookies",subOk2:"Pronto, você está na lista.",types:["O orbe brief", "Um orbe sprint", "Briefing para minha empresa", "Parceria ou universidade", "Imprensa", "Outro"],ps1n:"US$ 613 bi",ps1:"economia espacial global em 2024, +7,8% em um ano",ps2n:"US$ 1,8 tri",ps2:"projetados para 2035: cresce o dobro do ritmo do PIB mundial",ps3:"mais barato por quilo: do ônibus espacial (US$ 54.500/kg) ao Falcon 9 (US$ 2.720/kg)",ps4:"a próxima queda que a YC pede para novas startups aproveitarem",pbP2:"Mas o preço não cai sozinho nem em linha reta: a carona da SpaceX subiu de US$ 5.000 para US$ 7.000 por quilo desde 2019. Quem não sabe o preço exato que seu negócio precisa, aposta no escuro.",pbSrc:"Fontes: Space Foundation, The Space Report 2025 Q2 · Fórum Econômico Mundial e McKinsey (2024) · NASA Ames, H. Jones (2018) · Y Combinator, Requests for Startups · preços de rideshare da SpaceX 2019–2026.",nav0:"O problema",pbK:"O problema",pbH:"Todo mundo vê o espaço ficando mais barato. Quase ninguém sabe que negócio construir com isso.",pbP:"O preço de lançamento é a variável que decide se um negócio orbital dá lucro ou prejuízo. Mas essa conta não está num só lugar: está espalhada em papers, threads e relatórios de milhares de dólares, quase sempre em inglês técnico.",pb1t:"Fundadores sem número",pb1d:"Veem a oportunidade, mas ninguém diz a que preço por quilo a ideia deixa de dar prejuízo. Chegam à YC ou a um investidor com intuição, não com um modelo.",pb2t:"Investidores sem critério",pb2d:"Não conseguem avaliar uma proposta espacial sem contratar um especialista. Por isso dizem não, ou dizem sim sem saber por quê.",pb3t:"Informação cara ou espalhada",pb3d:"Relatórios sérios custam milhares de dólares e são feitos para governos. O que é grátis é notícia: diz o que aconteceu, não o que construir.",soT:"O que a orbe faz",soD:"Reduz cada negócio orbital a um número: o preço por quilo em que ele começa a dar lucro. Explore grátis no radar, estude no brief e valide sua ideia num sprint.",exK:"Um caso, grátis",exH:"Fibra óptica fabricada em órbita.",exP:"Em microgravidade, a fibra ZBLAN se forma sem os defeitos que a estragam na Terra e perde muito menos sinal. O negócio é claro. A pergunta é quando os números fecham.",exA:"Premissas do modelo: 100 kg em órbita por lote, US$ 600.000 de receita e US$ 350.000 de custos sem o lançamento.",ex1:"Hoje, carona",ex2:"Ponto de equilíbrio",ex3:"Meta da Starship",exCta:"Ver os outros casos no radar",exLoss:"prejuízo por lote",exWin:"lucro por lote",exBe:"aqui o prejuízo acaba",afK:"Depois de pagar",afH:"Você paga uma vez e em dois minutos tem tudo.",af1t:"Paga na Polar",af1d:"Checkout seguro com cartão. A Polar calcula e cobra os impostos do seu país.",af2t:"Recebe um e-mail",af2d:"Com o PDF, a planilha e seu código de acesso. Também ficam no seu portal de cliente da Polar.",af3t:"Volta ao radar",af3d:"A Polar redireciona você. Cole o código uma vez e os 25 casos ficam liberados.",tsK:"O que dizem",skip:"Pular para o conteúdo",nav1:"O radar",nav2:"O brief",nav3:"Preços",nav4:"Perguntas",ctaShort:"Obter o brief",h1:"O que construir quando o espaço ficar barato.",sub:"Todo negócio orbital tem um preço de lançamento abaixo do qual começa a dar lucro. Modelamos 25 e mostramos esse preço para cada um.",cta1:"Obter o brief · US$ 39",cta2:"Abrir o radar completo",proof1:"<b>25</b> modelos de negócio",proof2:"<b>4</b> idiomas",proof3:"<b>7 dias</b> de reembolso",perkg:" /kg até a órbita",sliderLabel:"Mova o preço de lançamento",
+count:(n,t)=>`<b>${n} de ${t}</b> negócios dão lucro a esse preço.`,eras:["Hoje: carona no Falcon 9","Falcon 9 dedicado e Falcon Heavy","Primeiros foguetes pesados reutilizáveis","Meta pública da Starship","Cenário de longo prazo"],
+k1:"A virada",h2a:"O custo de chegar à órbita vai cair de novo. Desta vez, em ordens de grandeza.",pChange:"A Y Combinator colocou isso na lista de startups que quer financiar: negócios que hoje não fecham na planilha, mas vão fechar quando lançar for 100 vezes mais barato. A pergunta não é mais se vai acontecer. É o que você vai construir quando acontecer.",s1:"por quilo numa carona hoje (Falcon 9 rideshare).",s2:"por quilo é a meta pública dos foguetes totalmente reutilizáveis.",s3:"de diferença. Entre esses dois números surgem indústrias inteiras.",src:"Valores aproximados com base em preços públicos e metas declaradas pelos operadores; mudam com frequência. O brief cita cada fonte e data.",
+coverT:"25 negócios que o espaço barato vai tornar possíveis",coverS:"PDF · 40 páginas · modelo editável",k2:"O brief",h2b:"Tudo o que você precisa para escolher seu negócio orbital, com números.",i1t:"Modelos de negócio",i1d:"De fibra óptica em microgravidade a dados de satélite para o agricultor. Cada um com mercado, cliente e risco principal.",i2t:"Preço de equilíbrio por caso",i2d:"O preço de lançamento em que cada negócio para de perder dinheiro, e quantos anos faltam segundo as projeções públicas.",i3t:"Modelo editável",i3d:"Uma planilha para mudar as premissas e testar sua própria ideia em minutos.",i4t:"Acesso ao radar",i4d:"A versão completa do radar web com os 25 casos liberados e atualizações trimestrais.",
+k3:"Para quem",h2c:"Feito para quem vai decidir o que será construído.",f1t:"Fundadores deep-tech",f1d:"Você procura sua próxima ideia e quer chegar à aplicação da YC com uma tese que se sustenta em números.",f2t:"Investidores",f2d:"Você quer entender a tese espacial sem virar engenheiro: memorandos de uma página, premissas visíveis.",f3t:"Engenheiros aeroespaciais",f3d:"Você tem a formação técnica. Falta saber onde está o negócio.",f4t:"Times de inovação",f4d:"Mineração, agro, telecom ou seguros: você avalia dados de satélite e precisa de um mapa antes de comprar.",
+k4:"Como funciona",h2d:"Da curiosidade a uma decisão em uma tarde.",st1t:"Explore o radar",st1d:"Mova o preço de lançamento e veja quais negócios acendem. Grátis, sem cadastro.",st2t:"Leia o brief",st2d:"Você recebe o PDF e o modelo no seu e-mail segundos após o pagamento.",st3t:"Valide sua ideia",st3d:"Mude as premissas no modelo ou agende um sprint de 90 minutos com a gente.",
+k5:"Preços",h2e:"Comece pelo brief. Suba de nível quando precisar.",badge:"Preço de fundador",p1t:"orbe brief",once:"pagamento único",p1a:"PDF de 40 páginas, 25 modelos",p1b:"Planilha editável",p1c:"Radar completo liberado",p1d:"Atualizações trimestrais",p1cta:"Comprar o brief",p2t:"orbe sprint",session:"por sessão",p2a:"90 minutos ao vivo",p2b:"Sua ideia passada pelo modelo",p2c:"Entregável com números e riscos",p2d:"Inclui o brief",p2cta:"Reservar sprint",p3t:"orbe radar pro",month:"/ mês",p3a:"Radar atualizado toda semana",p3b:"Base de dados de lançamentos",p3c:"Comunidade privada",p3cta:"Entrar na lista",regional:"Está na América Latina, África ou Sudeste Asiático? Use o código LATAM no checkout e pague US$ 19 pelo brief. Preços em dólares.",corpT:"Briefing para empresas · US$ 1.500",corpD:"Sessão privada para o seu time de inovação com casos da sua indústria.",corpCta:"Escrever para agendar",
+quote:"“O gargalo não vai ser o foguete. Vai ser saber o que lançar.”",role:"Fundador da orbe. Escreve sobre startups e tecnologia para mais de 45 mil leitores no LinkedIn e no Substack.",k6:"Perguntas",h2f:"O que costumam nos perguntar.",
+faq:[["Preciso criar uma conta?", "Para usar o radar grátis, não. Para o acesso completo, sim: crie sua conta com o mesmo e-mail do pagamento ou entre com Google, e ele é ativado automaticamente."],["Preciso saber engenharia?","Não. Cada caso é explicado em linguagem de negócios. Os detalhes técnicos ficam nos anexos para quem quiser."],["Em quais idiomas?","Espanhol, inglês, português e francês. Você recebe as quatro versões."],["Como recebo o brief?","A Polar envia o PDF e o link do modelo para o seu e-mail assim que o pagamento é confirmado."],["É recomendação de investimento?","Não. É uma análise educativa com premissas visíveis. Não recomendamos comprar nem vender valores mobiliários."],["Posso pedir reembolso?","Sim, em até 7 dias se o brief não te servir. Escreva para a gente."],["E quando os preços de lançamento mudarem?","O radar e o modelo são atualizados a cada trimestre. As atualizações estão incluídas."]],
+h2g:"Um caso orbital novo toda semana. Grátis.",pg:"Receba o radar no seu e-mail: um negócio, seu preço de equilíbrio e o que mudou na semana.",emailLbl:"Seu e-mail",emailPh:"voce@email.com",subCta:"Assinar grátis",subOk:"Pronto. Confira seu e-mail para confirmar a assinatura no Substack.",disc:"A orbe é um produto educativo e de pesquisa. Nada neste site é recomendação de investimento. Os números são estimativas com premissas visíveis. Pagamentos processados pela Polar como Merchant of Record. © 2026 orbe LLC.",title:"orbe · O que construir quando o espaço ficar barato"},
+fr:{nav5:"Contact",qT:"Vous n’avez pas trouvé votre réponse ? Posez-nous la question.",qPh:"Votre question",qBtn:"Envoyer la question",ctK:"Contact",ctH:"Parlons de votre idée, de votre fonds ou de votre entreprise.",ctP:"Nous répondons sous 24 heures ouvrées. Pour les entreprises, le premier appel de 30 minutes est gratuit.",ctCal:"Réserver un appel de 30 min",fName:"Nom",fEmail:"E-mail",fCompany:"Entreprise ou université",fCountry:"Pays",fType:"Je m’intéresse à",fMsg:"Message",fConsent:"J’accepte qu’orbe utilise ces données pour me répondre, conformément à la Politique de confidentialité.",fSend:"Envoyer le message",fOk:"Reçu. Nous répondons sous 24 heures ouvrées.",fErr:"Envoi impossible. Écrivez-nous par e-mail ou réessayez.",fNeed:"Indiquez nom, e-mail valide, message et acceptez la politique.",qOk:"Merci. Nous vous répondrons par e-mail.",lgT:"Conditions générales",lgP:"Confidentialité",lgA:"Usage de l’IA et réglementation",lgR:"Remboursements",lgC:"Cookies",subOk2:"C’est fait, vous êtes inscrit.",types:["orbe brief", "orbe sprint", "Un briefing pour mon entreprise", "Partenariat ou université", "Presse", "Autre"],ps1n:"613 Md $",ps1:"économie spatiale mondiale en 2024, +7,8 % en un an",ps2n:"1 800 Md $",ps2:"prévus en 2035 : une croissance deux fois plus rapide que le PIB mondial",ps3:"moins cher au kilo : de la navette (54 500 $/kg) au Falcon 9 (2 720 $/kg)",ps4:"la prochaine baisse que YC invite les startups à exploiter",pbP2:"Mais les prix ne baissent ni seuls ni en ligne droite : le vol partagé de SpaceX est passé de 5 000 à 7 000 $ le kilo depuis 2019. Sans connaître le prix exact dont votre activité a besoin, vous pariez à l’aveugle.",pbSrc:"Sources : Space Foundation, The Space Report 2025 Q2 · Forum économique mondial et McKinsey (2024) · NASA Ames, H. Jones (2018) · Y Combinator, Requests for Startups · tarifs rideshare SpaceX 2019–2026.",nav0:"Le problème",pbK:"Le problème",pbH:"Tout le monde voit l’espace devenir moins cher. Presque personne ne sait quelle activité construire avec.",pbP:"Le prix de lancement est la variable qui décide si une activité orbitale gagne ou perd de l’argent. Mais ce calcul n’existe nulle part en un seul endroit : il est éparpillé entre articles scientifiques, fils de discussion et rapports à plusieurs milliers de dollars, souvent en anglais technique.",pb1t:"Des fondateurs sans chiffre",pb1d:"Ils voient l’opportunité, mais personne ne leur dit à quel prix au kilo leur idée cesse de perdre de l’argent. Ils candidatent à YC avec une intuition, pas un modèle.",pb2t:"Des investisseurs sans cadre",pb2d:"Ils ne peuvent pas évaluer un projet spatial sans payer un expert. Alors ils disent non, ou oui sans savoir pourquoi.",pb3t:"Une information chère ou dispersée",pb3d:"Les rapports sérieux coûtent des milliers de dollars et visent les gouvernements. Le gratuit, ce sont des actualités : elles disent ce qui s’est passé, pas quoi construire.",soT:"Ce que fait orbe",soD:"Ramener chaque activité orbitale à un chiffre : le prix au kilo à partir duquel elle devient rentable. Explorez-le gratuitement dans le radar, approfondissez avec le brief, testez votre idée en sprint.",exK:"Un cas, offert",exH:"La fibre optique fabriquée en orbite.",exP:"En microgravité, la fibre ZBLAN se forme sans les défauts qui la gâchent sur Terre et perd beaucoup moins de signal. Le marché est évident. La question est de savoir quand les chiffres tiennent.",exA:"Hypothèses du modèle : 100 kg en orbite par lot, 600 000 $ de revenus et 350 000 $ de coûts hors lancement.",ex1:"Aujourd’hui, vol partagé",ex2:"Point d’équilibre",ex3:"Objectif Starship",exCta:"Voir les autres cas dans le radar",exLoss:"perte par lot",exWin:"gain par lot",exBe:"les pertes s’arrêtent ici",afK:"Après le paiement",afH:"Vous payez une fois et vous avez tout en deux minutes.",af1t:"Paiement sur Polar",af1d:"Paiement sécurisé par carte. Polar calcule et collecte les taxes de votre pays.",af2t:"Vous recevez un e-mail",af2d:"Avec le PDF, le tableur et votre code d’accès. Ils restent aussi dans votre espace client Polar.",af3t:"Retour au radar",af3d:"Polar vous redirige automatiquement. Collez le code une fois et les 25 cas se débloquent.",tsK:"Ce qu’on en dit",skip:"Aller au contenu",nav1:"Le radar",nav2:"Le brief",nav3:"Tarifs",nav4:"Questions",ctaShort:"Obtenir le brief",h1:"Quoi construire quand l’espace deviendra bon marché.",sub:"Chaque activité orbitale a un prix de lancement en dessous duquel elle devient rentable. Nous en avons modélisé 25 et vous donnons ce prix pour chacune.",cta1:"Obtenir le brief · 39 $",cta2:"Ouvrir le radar complet",proof1:"<b>25</b> modèles d’affaires",proof2:"<b>4</b> langues",proof3:"<b>7 jours</b> de remboursement",perkg:" /kg en orbite",sliderLabel:"Déplacez le prix de lancement",
+count:(n,t)=>`<b>${n} sur ${t}</b> activités sont rentables à ce prix.`,eras:["Aujourd’hui : vol partagé Falcon 9","Falcon 9 dédié et Falcon Heavy","Premiers lanceurs lourds réutilisables","Objectif public de Starship","Scénario de long terme"],
+k1:"Le basculement",h2a:"Le coût d’accès à l’orbite va encore chuter. Cette fois, de plusieurs ordres de grandeur.",pChange:"Y Combinator l’a inscrit dans sa liste de startups à financer : des activités qui ne tiennent pas aujourd’hui dans un tableur, mais tiendront quand lancer coûtera 100 fois moins. La question n’est plus de savoir si cela arrivera, mais ce que vous construirez quand ce sera le cas.",s1:"par kilo aujourd’hui en vol partagé (Falcon 9 rideshare).",s2:"par kilo : l’objectif public des fusées entièrement réutilisables.",s3:"d’écart. Entre ces deux chiffres naissent des industries entières.",src:"Chiffres approximatifs fondés sur des prix publics et des objectifs annoncés ; ils évoluent souvent. Le brief cite chaque source et date.",
+coverT:"25 activités que l’espace bon marché rendra possibles",coverS:"PDF · 40 pages · modèle modifiable",k2:"Le brief",h2b:"Tout ce qu’il faut pour choisir votre activité orbitale, chiffres à l’appui.",i1t:"Modèles d’affaires",i1d:"De la fibre optique en microgravité aux données satellites pour l’agriculteur. Chacun avec son marché, son client et son risque principal.",i2t:"Prix d’équilibre par cas",i2d:"Le prix de lancement auquel chaque activité cesse de perdre de l’argent, et dans combien d’années selon les projections publiques.",i3t:"Modèle modifiable",i3d:"Un tableur pour changer les hypothèses et tester votre propre idée en quelques minutes.",i4t:"Accès au radar",i4d:"La version complète du radar web avec les 25 cas débloqués et des mises à jour trimestrielles.",
+k3:"Pour qui",h2c:"Conçu pour celles et ceux qui décident de ce qui sera construit.",f1t:"Fondateurs deep-tech",f1d:"Vous cherchez votre prochaine idée et voulez candidater à YC avec une thèse chiffrée.",f2t:"Investisseurs",f2d:"Vous voulez comprendre la thèse spatiale sans devenir ingénieur : mémos d’une page, hypothèses visibles.",f3t:"Ingénieurs aérospatiaux",f3d:"Vous avez la formation technique. Il vous manque l’endroit où se trouve le marché.",f4t:"Équipes innovation",f4d:"Mines, agriculture, télécoms ou assurance : vous évaluez des données satellites et avez besoin d’une carte avant d’acheter.",
+k4:"Comment ça marche",h2d:"De la curiosité à une décision en un après-midi.",st1t:"Explorez le radar",st1d:"Déplacez le prix de lancement et voyez quelles activités s’allument. Gratuit, sans inscription.",st2t:"Lisez le brief",st2d:"Le PDF et le modèle arrivent dans votre boîte mail quelques secondes après le paiement.",st3t:"Validez votre idée",st3d:"Modifiez les hypothèses du modèle ou réservez un sprint de 90 minutes avec nous.",
+k5:"Tarifs",h2e:"Commencez par le brief. Passez au niveau supérieur quand vous en avez besoin.",badge:"Prix fondateur",p1t:"orbe brief",once:"paiement unique",p1a:"PDF de 40 pages, 25 modèles",p1b:"Tableur modifiable",p1c:"Radar complet débloqué",p1d:"Mises à jour trimestrielles",p1cta:"Acheter le brief",p2t:"orbe sprint",session:"par séance",p2a:"90 minutes en direct",p2b:"Votre idée passée au modèle",p2c:"Livrable chiffré avec les risques",p2d:"Brief inclus",p2cta:"Réserver un sprint",p3t:"orbe radar pro",month:"/ mois",p3a:"Radar mis à jour chaque semaine",p3b:"Base de données des lancements",p3c:"Communauté privée",p3cta:"Rejoindre la liste",regional:"Vous êtes en Afrique francophone, en Amérique latine ou en Asie du Sud-Est ? Utilisez le code LATAM au paiement et réglez 19 $ pour le brief. Prix en dollars US.",corpT:"Briefing entreprise · 1 500 $",corpD:"Une séance privée pour votre équipe innovation avec des cas de votre secteur.",corpCta:"Écrire pour planifier",
+quote:"« Le goulot d’étranglement ne sera plus la fusée. Ce sera savoir quoi envoyer. »",role:"Fondateur d’orbe. Écrit sur les startups et la technologie pour plus de 45 000 lecteurs sur LinkedIn et Substack.",k6:"Questions",h2f:"Ce qu’on nous demande souvent.",
+faq:[["Faut-il créer un compte ?", "Pas pour le radar gratuit. Pour l’accès complet, oui : inscrivez-vous avec l’e-mail utilisé pour payer, ou via Google, et il s’active automatiquement."],["Faut-il être ingénieur ?","Non. Chaque cas est expliqué en langage business. Les détails techniques sont en annexe pour ceux qui le souhaitent."],["Dans quelles langues ?","Espagnol, anglais, portugais et français. Vous recevez les quatre versions."],["Comment reçoit-on le brief ?","Polar vous envoie le PDF et le lien du modèle dès que le paiement est confirmé."],["Est-ce un conseil en investissement ?","Non. C’est une analyse pédagogique aux hypothèses visibles. Nous ne recommandons l’achat ni la vente d’aucun titre."],["Puis-je être remboursé ?","Oui, sous 7 jours si le brief ne vous est pas utile. Écrivez-nous."],["Et quand les prix de lancement changeront ?","Le radar et le modèle sont mis à jour chaque trimestre. Les mises à jour sont incluses."]],
+h2g:"Un nouveau cas orbital chaque semaine. Gratuit.",pg:"Recevez le radar par e-mail : une activité, son prix d’équilibre et ce qui a changé cette semaine.",emailLbl:"Votre e-mail",emailPh:"vous@email.com",subCta:"S’abonner gratuitement",subOk:"C’est fait. Vérifiez votre boîte mail pour confirmer l’abonnement Substack.",disc:"orbe est un produit pédagogique et de recherche. Rien sur ce site ne constitue un conseil en investissement. Les chiffres sont des estimations aux hypothèses visibles. Paiements traités par Polar en tant que Merchant of Record. © 2026 orbe LLC.",title:"orbe · Quoi construire quand l’espace deviendra bon marché"}
+};
+
+let lang="es";
+function safeHash(h){try{if(location.hash!==h)history.replaceState(null,"",h)}catch(e){/* vista previa en sandbox: se ignora */}}
+const NUM={es:"de-DE",en:"en-US",pt:"pt-BR",fr:"fr-FR"};
+function fmt(v){const neg=v<0;const n=Math.abs(Math.round(v)).toLocaleString(NUM[lang]);const s=lang==="fr"?n+" $":lang==="pt"?"US$ "+n:"$"+n;return neg?"−"+s:s}
+
+function setLang(l){
+  if(!T[l])l="es";lang=l;const d=T[l];
+  document.documentElement.lang=l;document.title=d.title;
+  document.querySelectorAll("[data-i]").forEach(el=>{const v=d[el.dataset.i];if(typeof v==="string")el.innerHTML=v});
+  document.querySelectorAll("[data-ip]").forEach(el=>{el.placeholder=d[el.dataset.ip]});
+  document.querySelectorAll(".lang button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.lang===l));
+  document.getElementById("faqList").innerHTML=d.faq.map(q=>`<details><summary>${q[0]}</summary><p>${q[1]}</p></details>`).join("");
+  if(location.hash.replace("#","")!==l && ["es","en","pt","fr"].includes(location.hash.replace("#",""))) safeHash("#"+l);
+  try{localStorage.setItem("orbe-lang",l)}catch(e){}
+  render();fillTypes();
+}
+document.querySelectorAll(".lang button").forEach(b=>b.addEventListener("click",()=>{setLang(b.dataset.lang);safeHash("#"+b.dataset.lang)}));
+
+// links
+document.querySelectorAll("[data-link]").forEach(a=>{const k=a.dataset.link;if(k==="brief"||k==="sprint"){a.addEventListener("click",ev=>buy(ev,k));return}const u=LINKS[k];if(u){a.href=u;if(/^https?:/.test(u)){a.target="_blank";a.rel="noopener"}}else if(["substack","linkedin","x","instagram","tiktok"].includes(k)){a.hidden=true}});
+function buy(ev,kind){
+  const url=(window.orbe&&window.orbe.checkoutUrl)?window.orbe.checkoutUrl(kind):"";
+  if(!url){ev.preventDefault();location.hash="contacto";const s=document.getElementById("cType");if(s)s.value=kind;return}
+  ev.preventDefault();window.location.href=url;
+}
+
+// radar
+const slider=document.getElementById("slider");
+function priceAt(v){const x=Math.pow(10,4-3*(v/1000));const m=Math.pow(10,Math.floor(Math.log10(x))-1);return Math.round(x/m)*m}
+function render(){
+  const p=priceAt(+slider.value),d=T[lang];
+  document.getElementById("price").innerHTML=fmt(p)+`<small>${d.perkg}</small>`;
+  const e=p>4000?0:p>1200?1:p>350?2:p>60?3:4;
+  document.getElementById("era").textContent=d.eras[e];
+  let on=0;
+  document.getElementById("biz").innerHTML=CASES.map(c=>{const ok=p<=c.be;if(ok)on++;return `<li class="${ok?"on":""}"><b>${c.n[lang]}</b><span>${fmt(c.be)}/kg</span></li>`}).join("");
+  document.getElementById("count").innerHTML=d.count(on,CASES.length);
+  slider.setAttribute("aria-valuetext",fmt(p)+" /kg");
+  const ex=(pr)=>600000-350000-100*pr;
+  document.getElementById("ex1v").textContent=fmt(ex(7000));document.getElementById("ex1p").textContent=fmt(7000)+"/kg · "+d.exLoss;
+  document.getElementById("ex2v").textContent=fmt(2500)+"/kg";document.getElementById("ex2p").textContent=d.exBe;
+  document.getElementById("ex3v").textContent="+"+fmt(ex(200));document.getElementById("ex3p").textContent=fmt(200)+"/kg · "+d.exWin;
+  const ts=document.getElementById("testimonios");ts.hidden=!TESTIMONIALS.length;
+  document.getElementById("quotes").innerHTML=TESTIMONIALS.map(q=>`<figure><blockquote>“${q.text[lang]||q.text.en}”</blockquote><figcaption><b>${q.name}</b> · <span class="muted">${q.role}</span></figcaption></figure>`).join("");
+  document.getElementById("n1").textContent=fmt(7000);document.getElementById("n2").textContent="<"+fmt(200);
+  document.getElementById("ticks").innerHTML=[10000,1000,100,10].map(v=>`<span>${fmt(v)}</span>`).join("");
+}
+slider.addEventListener("input",render);
+// start at ~$6,000
+slider.value=Math.round((4-Math.log10(7000))/3*1000);
+
+// substack form
+const form=document.getElementById("subForm");
+if(SUBSTACK){form.action=SUBSTACK.replace(/\/$/,"")+"/api/v1/free?nojs=true";}
+else{form.addEventListener("submit",async ev=>{ev.preventDefault();const em=document.getElementById("email").value.trim();if(!/^\S+@\S+\.\S+$/.test(em))return;try{const nd={type:"newsletter",email:em,message:"Suscripción al newsletter",lang,page:"index"};if(window.orbe&&window.orbe.enabled)await window.orbe.saveContact(nd);else await viaEmail(nd);document.getElementById("formMsg").textContent=T[lang].subOk2;form.reset()}catch(e){document.getElementById("formMsg").textContent=T[lang].fErr}},{capture:true});}
+if(SUBSTACK)form.addEventListener("submit",()=>{setTimeout(()=>{document.getElementById("formMsg").textContent=T[lang].subOk;form.reset()},300)});
+
+
+// ---- formularios: contacto y preguntas (se guardan en Firestore > contacts) ----
+const TYPEKEYS=["brief","sprint","empresa","alianza","prensa","otro"];
+function fillTypes(){const s=document.getElementById("cType");if(!s)return;const v=s.value;s.innerHTML=T[lang].types.map((x,i)=>`<option value="${TYPEKEYS[i]}">${x}</option>`).join("");if(v)s.value=v}
+const okEmail=e=>/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(e);
+// Sin Firebase: el mensaje llega al correo de contacto vía FormSubmit (gratis, sin cuenta).
+async function viaEmail(data){
+  const r=await fetch("https://formsubmit.co/ajax/"+encodeURIComponent(C.contactEmail),{method:"POST",headers:{"Content-Type":"application/json",Accept:"application/json"},
+    body:JSON.stringify({_subject:"orbe · "+data.type+" · "+(data.email||""),_template:"table",_captcha:"false",tipo:data.type,nombre:data.name||"",email:data.email,empresa:data.company||"",pais:data.country||"",mensaje:data.message||"",idioma:data.lang,pagina:data.page})});
+  if(!r.ok)throw new Error("formsubmit "+r.status);
+}
+async function sendData(data,out,okMsg,formEl){
+  out.className="fmsg";out.textContent="…";
+  try{
+    if(window.orbe&&window.orbe.enabled){await window.orbe.saveContact(data)}
+    else if(C.contactEmail){await viaEmail(data)}
+    else throw new Error("sin destino");
+    out.className="fmsg ok";out.textContent=okMsg;formEl.reset();
+  }catch(e){console.error(e);out.className="fmsg err";out.textContent=T[lang].fErr}
+}
+document.getElementById("cForm").addEventListener("submit",ev=>{ev.preventDefault();
+  const g=id=>document.getElementById(id).value.trim(),out=document.getElementById("cMsgOut");
+  const d={type:document.getElementById("cType").value,name:g("cName"),email:g("cEmail"),company:g("cCompany"),country:g("cCountry"),message:g("cMsg"),lang,page:"index#contacto"};
+  if(!d.name||!okEmail(d.email)||!d.message||!document.getElementById("cOk").checked){out.className="fmsg err";out.textContent=T[lang].fNeed;return}
+  sendData(d,out,T[lang].fOk,ev.target)});
+document.getElementById("qForm").addEventListener("submit",ev=>{ev.preventDefault();
+  const em=document.getElementById("qEmail").value.trim(),q=document.getElementById("qText").value.trim(),out=document.getElementById("qMsg");
+  if(!okEmail(em)||!q){out.className="fmsg err";out.textContent=T[lang].fNeed;return}
+  sendData({type:"pregunta",email:em,message:q,lang,page:"index#faq"},out,T[lang].qOk,ev.target)});
+
+// stars
+(function(){let s="",seed=11;const r=()=>(seed=(seed*9301+49297)%233280)/233280;for(let i=0;i<120;i++)s+=`<circle cx="${(r()*1200).toFixed(0)}" cy="${(r()*700).toFixed(0)}" r="${(r()*1.2+.2).toFixed(2)}" opacity="${(r()*.7+.15).toFixed(2)}"/>`;document.getElementById("stars").innerHTML=s})();
+
+// theme
+const root=document.documentElement;
+try{const t=localStorage.getItem("orbe-theme");if(t)root.dataset.theme=t}catch(e){}
+document.getElementById("themeBtn").addEventListener("click",()=>{const dark=root.dataset.theme?root.dataset.theme==="dark":matchMedia("(prefers-color-scheme:dark)").matches;root.dataset.theme=dark?"light":"dark";try{localStorage.setItem("orbe-theme",root.dataset.theme)}catch(e){}});
+
+// initial language: hash > saved > browser
+let start=location.hash.replace("#","");
+if(!T[start]){try{start=localStorage.getItem("orbe-lang")}catch(e){}}
+if(!T[start]){const nav=(navigator.language||"es").slice(0,2);start=T[nav]?nav:"es"}
+setLang(start);
+window.addEventListener("hashchange",()=>{const h=location.hash.replace("#","");if(T[h])setLang(h)});
+</script>
+</body>
+</html>

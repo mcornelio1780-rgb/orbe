@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>orbe · Legal</title>
+<meta name="robots" content="index,follow">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 110'%3E%3Crect x='-10' y='-5' width='120' height='120' rx='26' fill='%230D1330'/%3E%3Cpath d='M44 98 C44 88 34 82 26 74 A34 34 0 1 1 76.05 71.86' fill='none' stroke='%23F2F4F8' stroke-width='10' stroke-linecap='round'/%3E%3Ccircle cx='62.74' cy='81.52' r='8' fill='%23FF5A1F'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="orbe-config.js"></script>
+<style>
+:root{--bg:#F2F4F8;--fg:#0D1330;--muted:#50566E;--line:#D9DEEA;--card:#fff;--llama:#FF5A1F;--serif:"Fraunces",Georgia,serif;--sans:"Hanken Grotesk",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#070A1C;--fg:#F2F4F8;--muted:#A3A9C2;--line:#232A4D;--card:#0D1330;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#070A1C;--fg:#F2F4F8;--muted:#A3A9C2;--line:#232A4D;--card:#0D1330;color-scheme:dark}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--sans);font-size:16px;line-height:1.65}
+a{color:inherit}
+header{position:sticky;top:0;background:var(--bg);border-bottom:1px solid var(--line);z-index:10;padding-top:env(safe-area-inset-top,0px)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:20;background:var(--bg)}
+.bar{max-width:1080px;margin:0 auto;padding:0 22px;height:60px;display:flex;align-items:center;gap:14px}
+.logo{display:flex;align-items:center;gap:7px;font-family:var(--serif);font-weight:600;font-size:1.4rem;text-decoration:none}
+.logo svg{height:1.15em;width:auto}
+.sp{flex:1}
+.seg{display:flex;border:1px solid var(--line);border-radius:999px;padding:3px}
+.seg button{background:none;border:0;padding:4px 9px;border-radius:999px;font:inherit;font-size:.78rem;font-weight:700;color:var(--muted);cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--fg);color:var(--bg)}
+.wrap{max-width:1080px;margin:0 auto;padding:32px 22px 80px;display:grid;grid-template-columns:220px 1fr;gap:40px}
+@media(max-width:820px){.wrap{grid-template-columns:1fr;gap:16px}}
+nav.side{position:sticky;top:84px;align-self:start;display:flex;flex-direction:column;gap:4px}
+@media(max-width:820px){nav.side{position:static;flex-direction:row;flex-wrap:wrap}}
+nav.side a{text-decoration:none;padding:8px 12px;border-radius:10px;color:var(--muted);font-size:.92rem}
+nav.side a[aria-current="true"]{background:var(--card);color:var(--fg);font-weight:600;border:1px solid var(--line)}
+article{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:32px;max-width:760px}
+@media(max-width:560px){article{padding:22px}}
+h1{font-family:var(--serif);font-weight:600;font-size:clamp(1.8rem,4vw,2.4rem);margin:0 0 6px;letter-spacing:-.01em}
+h2{font-size:1.05rem;margin:26px 0 6px}
+.meta{color:var(--muted);font-size:.86rem;margin-bottom:18px}
+p,li{max-width:68ch}
+.note{border-left:3px solid var(--llama);padding:4px 0 4px 14px;color:var(--muted);font-size:.9rem;margin-top:26px}
+footer{text-align:center;color:var(--muted);font-size:.85rem;padding:0 0 40px}
+</style>
+</head>
+<body>
+<header><div class="bar">
+  <a class="logo" href="index.html"><svg viewBox="0 0 100 110" aria-hidden="true"><path d="M12 106 Q50 95 88 106" fill="none" stroke="currentColor" stroke-width="4.5" stroke-linecap="round"/><path d="M44 98 C44 88 34 82 26 74 A34 34 0 1 1 76.05 71.86" fill="none" stroke="currentColor" stroke-width="8.5" stroke-linecap="round"/><circle cx="62.74" cy="81.52" r="6.4" fill="#FF5A1F"/></svg>orbe</a>
+  <span class="sp"></span>
+  <div class="seg" role="group" aria-label="Language"><button data-l="es">ES</button><button data-l="en">EN</button><button data-l="pt">PT</button><button data-l="fr">FR</button></div>
+</div></header>
+<div class="wrap">
+  <nav class="side" id="side" aria-label="Legal"></nav>
+  <article id="doc"></article>
+</div>
+<footer id="foot"></footer>
+
+<script>
+const C=window.ORBE_CONFIG||{};const L=C.legal||{};
+const CO=L.company||"orbe LLC",ADDR=L.address||"[dirección de la LLC]",STATE=L.state||"[estado de registro]",MAIL=C.contactEmail||"[correo de contacto]",UPD=L.updated||"2026-11-13";
+const IDS=["terminos","privacidad","ia","reembolsos","cookies"];
+const D={
+es:{names:["Términos y condiciones","Política de privacidad","Uso de IA y regulación","Reembolsos","Cookies"],upd:"Última actualización",back:"Volver a orbe",note:"Este texto es una base general redactada para orbe y no sustituye la revisión de un abogado en cada jurisdicción donde vendas.",
+terminos:`<h2>1. Quiénes somos</h2><p>orbe es un servicio de ${CO}, con domicilio en ${ADDR} (${STATE}, EE. UU.). Contacto: ${MAIL}.</p>
+<h2>2. Qué ofrecemos</h2><p>orbe ofrece análisis educativos sobre modelos de negocio en la economía orbital: el radar web, el orbe brief (reporte y modelo editable), sesiones orbe sprint y briefings para empresas. Las cifras son estimaciones con supuestos visibles. <b>Nada en orbe es asesoría de inversión, financiera, legal ni recomendación para comprar o vender valores.</b> Tú decides cómo usar la información.</p>
+<h2>3. Cuenta</h2><p>Para el acceso completo necesitas una cuenta con un correo verificado o con Google. Eres responsable de mantener tu contraseña segura. Debes tener al menos 16 años.</p>
+<h2>4. Licencia de uso</h2><p>Al comprar recibes una licencia personal, no exclusiva e intransferible para usar el brief y el radar. No puedes revender, redistribuir ni publicar el contenido completo. Puedes citar fragmentos breves mencionando la fuente.</p>
+<h2>5. Pagos</h2><p>Los pagos se procesan a través de Polar (Polar Software Inc.), que actúa como comerciante registrado (Merchant of Record) y calcula los impuestos aplicables. Los precios están en dólares estadounidenses. orbe no almacena datos de tarjetas.</p>
+<h2>6. Sesiones</h2><p>Los sprints y briefings se agendan por Cal.com. Puedes reprogramar hasta 24 horas antes.</p>
+<h2>7. Limitación de responsabilidad</h2><p>orbe se ofrece \"tal cual\". En la medida que lo permita la ley, nuestra responsabilidad total se limita al monto que pagaste en los últimos 12 meses. No respondemos por decisiones de negocio o inversión tomadas con base en el contenido.</p>
+<h2>8. Cambios y ley aplicable</h2><p>Podemos actualizar estos términos y te avisaremos de cambios importantes. Se rigen por las leyes de ${STATE}, EE. UU., sin perjuicio de los derechos que te otorguen las leyes de protección al consumidor de tu país.</p>`,
+privacidad:`<h2>1. Responsable</h2><p>${CO} (${ADDR}) es responsable del tratamiento de tus datos. Contacto para privacidad: ${MAIL}.</p>
+<h2>2. Qué datos recogemos</h2><ul><li><b>Cuenta:</b> correo, nombre y, si usas Google, tu foto de perfil.</li><li><b>Formularios:</b> nombre, correo, empresa, país y mensaje que nos envías.</li><li><b>Newsletter:</b> tu correo, si te suscribes.</li><li><b>Compras:</b> Polar nos comparte tu correo, producto e importe. No recibimos datos de tarjeta.</li><li><b>Uso:</b> preferencias de idioma y tema, y las ideas que guardas en el radar, que se quedan en tu navegador.</li></ul>
+<h2>3. Para qué y con qué base</h2><p>Para darte acceso a lo que compraste (ejecución del contrato), responder tus mensajes y enviarte el newsletter (consentimiento), y mejorar el servicio y prevenir fraude (interés legítimo). No vendemos tus datos ni los usamos para publicidad de terceros.</p>
+<h2>4. Proveedores</h2><p>Google Firebase (autenticación y base de datos), Polar (pagos), Vercel (alojamiento), Substack (newsletter), FormSubmit (envío de formularios al correo) y Cal.com (agenda). Algunos procesan datos en Estados Unidos con las garantías contractuales correspondientes.</p>
+<h2>5. Cuánto tiempo</h2><p>Datos de cuenta: mientras la cuenta exista. Mensajes: hasta 24 meses. Registros de compra: el tiempo que exija la ley tributaria.</p>
+<h2>6. Tus derechos</h2><p>Puedes acceder, rectificar, eliminar, oponerte, limitar el uso y pedir la portabilidad de tus datos, y retirar tu consentimiento en cualquier momento. Esto incluye los derechos ARCO (Perú, Ley 29733), los del RGPD (UE), la LGPD (Brasil) y la CCPA/CPRA (California). Escríbenos a ${MAIL}; respondemos en un plazo máximo de 30 días. También puedes reclamar ante tu autoridad de protección de datos.</p>`,
+ia:`<h2>1. Nuestro compromiso</h2><p>Queremos que sepas siempre cuándo interviene la inteligencia artificial en orbe y que ninguna decisión importante sobre ti dependa solo de un sistema automático.</p>
+<h2>2. Dónde usamos IA y dónde no</h2><ul><li><b>El radar y la landing no usan IA:</b> los cálculos son fórmulas fijas que se ejecutan en tu navegador.</li><li><b>No tomamos decisiones automatizadas</b> con efectos legales o significativos sobre ti, ni hacemos perfiles para publicidad.</li><li><b>Contenido asistido:</b> algunos textos (publicaciones, borradores del brief, traducciones) se elaboran con ayuda de herramientas de IA generativa y siempre son revisados y aprobados por una persona del equipo.</li><li><b>Tus datos no entrenan modelos:</b> no usamos lo que nos envías para entrenar sistemas de IA.</li></ul>
+<h2>3. Marcos que seguimos</h2><p>Aplicamos los principios de transparencia del Reglamento de IA de la Unión Europea (Reglamento (UE) 2024/1689, en especial su artículo 50 sobre informar cuando se interactúa con IA o se publica contenido generado por IA), el artículo 22 del RGPD y el artículo 20 de la LGPD de Brasil sobre decisiones automatizadas, la Ley 31814 de Perú sobre el uso ético y transparente de la IA, y las normas de protección al consumidor que prohíben afirmaciones engañosas sobre IA, como las de la FTC en EE. UU. orbe no opera sistemas de IA de alto riesgo.</p>
+<h2>4. Si cambiamos</h2><p>Si incorporamos un asistente o una función de IA, lo indicaremos de forma visible antes de que la uses y actualizaremos esta página.</p>
+<h2>5. Consultas</h2><p>Para cualquier pregunta sobre IA o para pedir que una persona revise algo, escríbenos a ${MAIL}.</p>`,
+reembolsos:`<h2>orbe brief</h2><p>Si el brief no te sirve, pide el reembolso dentro de los 7 días posteriores a la compra escribiendo a ${MAIL}. Lo procesamos a través de Polar y el acceso completo se desactiva.</p>
+<h2>orbe sprint</h2><p>Reembolso total si cancelas al menos 24 horas antes de la sesión. Después de realizada la sesión no hay reembolso.</p>
+<h2>Briefings para empresas</h2><p>Se rigen por la cotización aceptada.</p>
+<h2>Cómo se acredita</h2><p>Polar devuelve el dinero al mismo medio de pago. El plazo depende de tu banco, normalmente entre 5 y 10 días hábiles.</p>`,
+cookies:`<h2>Qué guardamos en tu navegador</h2><ul><li><b>Esenciales:</b> la sesión de tu cuenta (Firebase) y tus preferencias de idioma y tema.</li><li><b>Funcionales:</b> las ideas que guardas en el radar, que se quedan solo en tu dispositivo.</li></ul>
+<h2>Qué no usamos</h2><p>No usamos cookies publicitarias ni de seguimiento entre sitios.</p>
+<h2>Terceros</h2><p>Al pagar en Polar, iniciar sesión con Google o agendar en Cal.com, esos servicios pueden usar sus propias cookies según sus políticas.</p>
+<h2>Cómo borrarlas</h2><p>Puedes borrarlas desde la configuración de tu navegador; si lo haces, se cerrará tu sesión.</p>`},
+en:{names:["Terms and conditions","Privacy policy","AI use and regulation","Refunds","Cookies"],upd:"Last updated",back:"Back to orbe",note:"This is a general baseline written for orbe and does not replace review by a lawyer in each jurisdiction where you sell.",
+terminos:`<h2>1. Who we are</h2><p>orbe is a service of ${CO}, located at ${ADDR} (${STATE}, USA). Contact: ${MAIL}.</p>
+<h2>2. What we offer</h2><p>orbe offers educational analysis of business models in the orbital economy: the web radar, the orbe brief (report and editable model), orbe sprint sessions and company briefings. Figures are estimates with visible assumptions. <b>Nothing in orbe is investment, financial or legal advice, or a recommendation to buy or sell securities.</b> You decide how to use the information.</p>
+<h2>3. Account</h2><p>Full access requires an account with a verified email or Google. You are responsible for keeping your password safe. You must be at least 16 years old.</p>
+<h2>4. License</h2><p>When you buy, you get a personal, non-exclusive, non-transferable license to use the brief and the radar. You may not resell, redistribute or publish the full content. You may quote short excerpts with attribution.</p>
+<h2>5. Payments</h2><p>Payments are processed by Polar (Polar Software Inc.), which acts as Merchant of Record and calculates applicable taxes. Prices are in US dollars. orbe does not store card data.</p>
+<h2>6. Sessions</h2><p>Sprints and briefings are booked via Cal.com. You can reschedule up to 24 hours before.</p>
+<h2>7. Limitation of liability</h2><p>orbe is provided \"as is\". To the extent permitted by law, our total liability is limited to the amount you paid in the last 12 months. We are not liable for business or investment decisions based on the content.</p>
+<h2>8. Changes and governing law</h2><p>We may update these terms and will notify you of material changes. They are governed by the laws of ${STATE}, USA, without prejudice to the rights granted by your country’s consumer protection laws.</p>`,
+privacidad:`<h2>1. Controller</h2><p>${CO} (${ADDR}) is responsible for your data. Privacy contact: ${MAIL}.</p>
+<h2>2. What we collect</h2><ul><li><b>Account:</b> email, name and, if you use Google, your profile photo.</li><li><b>Forms:</b> name, email, company, country and the message you send.</li><li><b>Newsletter:</b> your email, if you subscribe.</li><li><b>Purchases:</b> Polar shares your email, product and amount. We never receive card data.</li><li><b>Usage:</b> language and theme preferences, and the ideas you save in the radar, which stay in your browser.</li></ul>
+<h2>3. Why and on what basis</h2><p>To give you access to what you bought (contract), reply to your messages and send the newsletter (consent), and improve the service and prevent fraud (legitimate interest). We do not sell your data or use it for third-party advertising.</p>
+<h2>4. Providers</h2><p>Google Firebase (authentication and database), Polar (payments), Vercel (hosting), Substack (newsletter), FormSubmit (form delivery to email) and Cal.com (scheduling). Some process data in the United States under appropriate contractual safeguards.</p>
+<h2>5. Retention</h2><p>Account data: while the account exists. Messages: up to 24 months. Purchase records: as long as tax law requires.</p>
+<h2>6. Your rights</h2><p>You can access, correct, delete, object to, restrict and port your data, and withdraw consent at any time, including your rights under the GDPR (EU), LGPD (Brazil), CCPA/CPRA (California) and Peru’s Law 29733. Email ${MAIL}; we reply within 30 days. You may also complain to your data protection authority.</p>`,
+ia:`<h2>1. Our commitment</h2><p>We want you to always know when artificial intelligence is involved in orbe, and no important decision about you will rely solely on an automated system.</p>
+<h2>2. Where we use AI and where we don’t</h2><ul><li><b>The radar and the landing page do not use AI:</b> calculations are fixed formulas that run in your browser.</li><li><b>We make no automated decisions</b> with legal or similarly significant effects on you, and we do no ad profiling.</li><li><b>Assisted content:</b> some texts (posts, brief drafts, translations) are prepared with generative AI tools and are always reviewed and approved by a person on our team.</li><li><b>Your data does not train models:</b> we do not use what you send us to train AI systems.</li></ul>
+<h2>3. Frameworks we follow</h2><p>We apply the transparency principles of the EU AI Act (Regulation (EU) 2024/1689, especially Article 50 on disclosing AI interactions and AI-generated content), GDPR Article 22 and Brazil’s LGPD Article 20 on automated decisions, Peru’s Law 31814 on the ethical and transparent use of AI, and consumer-protection rules against deceptive AI claims, such as the US FTC’s. orbe does not operate high-risk AI systems.</p>
+<h2>4. If we change</h2><p>If we add an AI assistant or feature, we will say so visibly before you use it and update this page.</p>
+<h2>5. Questions</h2><p>For any question about AI, or to ask a person to review something, email ${MAIL}.</p>`,
+reembolsos:`<h2>orbe brief</h2><p>If the brief isn’t useful, request a refund within 7 days of purchase by emailing ${MAIL}. We process it through Polar and full access is turned off.</p>
+<h2>orbe sprint</h2><p>Full refund if you cancel at least 24 hours before the session. No refund after the session has taken place.</p>
+<h2>Company briefings</h2><p>Governed by the accepted quote.</p>
+<h2>How refunds arrive</h2><p>Polar returns the money to the original payment method. Timing depends on your bank, usually 5 to 10 business days.</p>`,
+cookies:`<h2>What we store in your browser</h2><ul><li><b>Essential:</b> your account session (Firebase) and language and theme preferences.</li><li><b>Functional:</b> the ideas you save in the radar, which stay only on your device.</li></ul>
+<h2>What we don’t use</h2><p>No advertising or cross-site tracking cookies.</p>
+<h2>Third parties</h2><p>When you pay on Polar, sign in with Google or book on Cal.com, those services may use their own cookies under their policies.</p>
+<h2>How to delete them</h2><p>Clear them in your browser settings; doing so logs you out.</p>`},
+pt:{names:["Termos e condições","Política de privacidade","Uso de IA e regulação","Reembolsos","Cookies"],upd:"Última atualização",back:"Voltar à orbe",note:"Este texto é uma base geral preparada para a orbe e não substitui a revisão de um advogado em cada jurisdição onde você vende.",
+terminos:`<h2>1. Quem somos</h2><p>A orbe é um serviço da ${CO}, com endereço em ${ADDR} (${STATE}, EUA). Contato: ${MAIL}.</p>
+<h2>2. O que oferecemos</h2><p>A orbe oferece análises educativas sobre modelos de negócio na economia orbital: o radar web, o orbe brief (relatório e modelo editável), sessões orbe sprint e briefings para empresas. Os números são estimativas com premissas visíveis. <b>Nada na orbe é recomendação de investimento, financeira ou jurídica, nem indicação para comprar ou vender valores mobiliários.</b> Você decide como usar a informação.</p>
+<h2>3. Conta</h2><p>O acesso completo exige uma conta com e-mail verificado ou Google. Você é responsável por manter sua senha segura. É preciso ter pelo menos 16 anos.</p>
+<h2>4. Licença</h2><p>Ao comprar, você recebe uma licença pessoal, não exclusiva e intransferível para usar o brief e o radar. Não é permitido revender, redistribuir ou publicar o conteúdo completo. Você pode citar trechos curtos com a fonte.</p>
+<h2>5. Pagamentos</h2><p>Os pagamentos são processados pela Polar (Polar Software Inc.), que atua como Merchant of Record e calcula os impostos aplicáveis. Preços em dólares americanos. A orbe não armazena dados de cartão.</p>
+<h2>6. Sessões</h2><p>Sprints e briefings são agendados pelo Cal.com. Você pode remarcar até 24 horas antes.</p>
+<h2>7. Limitação de responsabilidade</h2><p>A orbe é oferecida \"no estado em que se encontra\". Na medida permitida por lei, nossa responsabilidade total se limita ao valor pago nos últimos 12 meses. Não respondemos por decisões de negócio ou investimento baseadas no conteúdo.</p>
+<h2>8. Alterações e lei aplicável</h2><p>Podemos atualizar estes termos e avisaremos sobre mudanças importantes. Regem-se pelas leis de ${STATE}, EUA, sem prejuízo dos direitos garantidos pelo Código de Defesa do Consumidor e demais leis do seu país.</p>`,
+privacidad:`<h2>1. Controlador</h2><p>A ${CO} (${ADDR}) é a controladora dos seus dados. Contato de privacidade: ${MAIL}.</p>
+<h2>2. Dados coletados</h2><ul><li><b>Conta:</b> e-mail, nome e, se usar Google, sua foto de perfil.</li><li><b>Formulários:</b> nome, e-mail, empresa, país e mensagem enviada.</li><li><b>Newsletter:</b> seu e-mail, se você assinar.</li><li><b>Compras:</b> a Polar compartilha seu e-mail, produto e valor. Nunca recebemos dados de cartão.</li><li><b>Uso:</b> preferências de idioma e tema, e as ideias salvas no radar, que ficam no seu navegador.</li></ul>
+<h2>3. Finalidades e bases legais</h2><p>Dar acesso ao que você comprou (execução de contrato), responder mensagens e enviar a newsletter (consentimento), e melhorar o serviço e prevenir fraudes (legítimo interesse). Não vendemos seus dados nem os usamos para publicidade de terceiros.</p>
+<h2>4. Operadores</h2><p>Google Firebase (autenticação e banco de dados), Polar (pagamentos), Vercel (hospedagem), Substack (newsletter), FormSubmit (envio de formulários por e-mail) e Cal.com (agenda). Alguns tratam dados nos Estados Unidos com as salvaguardas contratuais adequadas.</p>
+<h2>5. Retenção</h2><p>Dados da conta: enquanto a conta existir. Mensagens: até 24 meses. Registros de compra: pelo prazo exigido pela lei tributária.</p>
+<h2>6. Seus direitos (LGPD)</h2><p>Você pode confirmar o tratamento, acessar, corrigir, anonimizar, eliminar, portar seus dados e revogar o consentimento a qualquer momento. Escreva para ${MAIL}; respondemos em até 15 dias. Você também pode reclamar à ANPD.</p>`,
+ia:`<h2>1. Nosso compromisso</h2><p>Queremos que você sempre saiba quando a inteligência artificial participa da orbe, e nenhuma decisão importante sobre você dependerá apenas de um sistema automatizado.</p>
+<h2>2. Onde usamos IA e onde não</h2><ul><li><b>O radar e a landing não usam IA:</b> os cálculos são fórmulas fixas executadas no seu navegador.</li><li><b>Não tomamos decisões automatizadas</b> com efeitos legais ou significativos sobre você, nem criamos perfis para publicidade.</li><li><b>Conteúdo assistido:</b> alguns textos (posts, rascunhos do brief, traduções) são preparados com ferramentas de IA generativa e sempre revisados e aprovados por uma pessoa da equipe.</li><li><b>Seus dados não treinam modelos:</b> não usamos o que você envia para treinar sistemas de IA.</li></ul>
+<h2>3. Marcos que seguimos</h2><p>Aplicamos os princípios de transparência do Regulamento de IA da União Europeia (Regulamento (UE) 2024/1689, especialmente o artigo 50), o artigo 20 da LGPD sobre revisão de decisões automatizadas, o artigo 22 do RGPD, a Lei 31814 do Peru sobre uso ético e transparente da IA, e as normas de defesa do consumidor contra alegações enganosas sobre IA. Acompanhamos a tramitação do PL 2338/2023 no Brasil. A orbe não opera sistemas de IA de alto risco.</p>
+<h2>4. Se mudarmos</h2><p>Se incorporarmos um assistente ou função de IA, avisaremos de forma visível antes do uso e atualizaremos esta página.</p>
+<h2>5. Dúvidas</h2><p>Para qualquer pergunta sobre IA, ou para pedir revisão humana, escreva para ${MAIL}.</p>`,
+reembolsos:`<h2>orbe brief</h2><p>Se o brief não for útil, peça o reembolso em até 7 dias após a compra pelo e-mail ${MAIL}. Processamos pela Polar e o acesso completo é desativado.</p>
+<h2>orbe sprint</h2><p>Reembolso total se cancelar com pelo menos 24 horas de antecedência. Após a sessão realizada, não há reembolso.</p>
+<h2>Briefings para empresas</h2><p>Seguem a proposta aceita.</p>
+<h2>Como o valor volta</h2><p>A Polar devolve ao mesmo meio de pagamento. O prazo depende do seu banco, normalmente de 5 a 10 dias úteis.</p>`,
+cookies:`<h2>O que guardamos no seu navegador</h2><ul><li><b>Essenciais:</b> a sessão da sua conta (Firebase) e preferências de idioma e tema.</li><li><b>Funcionais:</b> as ideias salvas no radar, que ficam só no seu dispositivo.</li></ul>
+<h2>O que não usamos</h2><p>Nenhum cookie de publicidade ou rastreamento entre sites.</p>
+<h2>Terceiros</h2><p>Ao pagar na Polar, entrar com Google ou agendar no Cal.com, esses serviços podem usar cookies próprios conforme suas políticas.</p>
+<h2>Como apagar</h2><p>Apague nas configurações do navegador; isso encerra sua sessão.</p>`},
+fr:{names:["Conditions générales","Politique de confidentialité","Usage de l’IA et réglementation","Remboursements","Cookies"],upd:"Dernière mise à jour",back:"Retour à orbe",note:"Ce texte est une base générale rédigée pour orbe et ne remplace pas l’avis d’un avocat dans chaque juridiction où vous vendez.",
+terminos:`<h2>1. Qui sommes-nous</h2><p>orbe est un service de ${CO}, situé ${ADDR} (${STATE}, États-Unis). Contact : ${MAIL}.</p>
+<h2>2. Ce que nous proposons</h2><p>orbe propose des analyses pédagogiques de modèles d’affaires de l’économie orbitale : le radar web, le orbe brief (rapport et modèle modifiable), les séances orbe sprint et des briefings pour entreprises. Les chiffres sont des estimations aux hypothèses visibles. <b>Rien dans orbe ne constitue un conseil en investissement, financier ou juridique, ni une recommandation d’achat ou de vente de titres.</b> Vous décidez de l’usage de l’information.</p>
+<h2>3. Compte</h2><p>L’accès complet nécessite un compte avec e-mail vérifié ou Google. Vous êtes responsable de la sécurité de votre mot de passe. Vous devez avoir au moins 16 ans.</p>
+<h2>4. Licence</h2><p>À l’achat, vous recevez une licence personnelle, non exclusive et non cessible pour utiliser le brief et le radar. Il est interdit de revendre, redistribuer ou publier le contenu intégral. Les courtes citations avec la source sont autorisées.</p>
+<h2>5. Paiements</h2><p>Les paiements sont traités par Polar (Polar Software Inc.), qui agit en tant que Merchant of Record et calcule les taxes applicables. Prix en dollars US. orbe ne conserve aucune donnée de carte.</p>
+<h2>6. Séances</h2><p>Les sprints et briefings se réservent via Cal.com. Report possible jusqu’à 24 heures avant.</p>
+<h2>7. Limitation de responsabilité</h2><p>orbe est fourni « en l’état ». Dans la mesure permise par la loi, notre responsabilité totale est limitée au montant payé au cours des 12 derniers mois. Nous ne sommes pas responsables des décisions d’affaires ou d’investissement fondées sur le contenu.</p>
+<h2>8. Modifications et droit applicable</h2><p>Nous pouvons mettre à jour ces conditions et vous informerons des changements importants. Elles sont régies par le droit de ${STATE} (États-Unis), sans préjudice des droits que vous accorde le droit de la consommation de votre pays.</p>`,
+privacidad:`<h2>1. Responsable du traitement</h2><p>${CO} (${ADDR}) est responsable de vos données. Contact confidentialité : ${MAIL}.</p>
+<h2>2. Données collectées</h2><ul><li><b>Compte :</b> e-mail, nom et, avec Google, votre photo de profil.</li><li><b>Formulaires :</b> nom, e-mail, entreprise, pays et message envoyé.</li><li><b>Newsletter :</b> votre e-mail, si vous vous abonnez.</li><li><b>Achats :</b> Polar nous transmet votre e-mail, le produit et le montant. Nous ne recevons jamais de données de carte.</li><li><b>Usage :</b> préférences de langue et de thème, et les idées enregistrées dans le radar, qui restent dans votre navigateur.</li></ul>
+<h2>3. Finalités et bases légales</h2><p>Vous donner accès à vos achats (exécution du contrat), répondre à vos messages et envoyer la newsletter (consentement), améliorer le service et prévenir la fraude (intérêt légitime). Nous ne vendons pas vos données et ne les utilisons pas pour de la publicité tierce.</p>
+<h2>4. Sous-traitants</h2><p>Google Firebase (authentification et base de données), Polar (paiements), Vercel (hébergement), Substack (newsletter), FormSubmit (envoi des formulaires par e-mail) et Cal.com (agenda). Certains traitent des données aux États-Unis avec des garanties contractuelles appropriées.</p>
+<h2>5. Conservation</h2><p>Données de compte : tant que le compte existe. Messages : jusqu’à 24 mois. Données d’achat : durée exigée par la loi fiscale.</p>
+<h2>6. Vos droits (RGPD)</h2><p>Vous pouvez accéder à vos données, les rectifier, les effacer, vous opposer, limiter leur traitement, demander leur portabilité et retirer votre consentement à tout moment. Écrivez à ${MAIL} ; nous répondons sous 30 jours. Vous pouvez aussi saisir la CNIL ou votre autorité de contrôle.</p>`,
+ia:`<h2>1. Notre engagement</h2><p>Nous voulons que vous sachiez toujours quand l’intelligence artificielle intervient dans orbe, et aucune décision importante vous concernant ne reposera uniquement sur un système automatisé.</p>
+<h2>2. Où nous utilisons l’IA, et où non</h2><ul><li><b>Le radar et la page d’accueil n’utilisent pas d’IA :</b> les calculs sont des formules fixes exécutées dans votre navigateur.</li><li><b>Aucune décision automatisée</b> produisant des effets juridiques ou significatifs à votre égard, ni profilage publicitaire.</li><li><b>Contenus assistés :</b> certains textes (publications, ébauches du brief, traductions) sont préparés avec des outils d’IA générative et sont toujours relus et validés par une personne de l’équipe.</li><li><b>Vos données n’entraînent pas de modèles :</b> nous n’utilisons pas ce que vous nous envoyez pour entraîner des systèmes d’IA.</li></ul>
+<h2>3. Cadres que nous suivons</h2><p>Nous appliquons les principes de transparence du règlement européen sur l’IA (règlement (UE) 2024/1689, notamment son article 50), l’article 22 du RGPD sur les décisions automatisées, les recommandations de la CNIL, la loi péruvienne 31814 sur l’usage éthique et transparent de l’IA, et les règles de protection des consommateurs contre les allégations trompeuses sur l’IA. orbe n’exploite aucun système d’IA à haut risque.</p>
+<h2>4. En cas de changement</h2><p>Si nous ajoutons un assistant ou une fonction d’IA, nous l’indiquerons clairement avant usage et mettrons cette page à jour.</p>
+<h2>5. Questions</h2><p>Pour toute question sur l’IA, ou pour demander une revue humaine, écrivez à ${MAIL}.</p>`,
+reembolsos:`<h2>orbe brief</h2><p>Si le brief ne vous est pas utile, demandez le remboursement sous 7 jours après l’achat en écrivant à ${MAIL}. Nous le traitons via Polar et l’accès complet est désactivé.</p>
+<h2>orbe sprint</h2><p>Remboursement intégral en cas d’annulation au moins 24 heures avant la séance. Aucun remboursement une fois la séance réalisée.</p>
+<h2>Briefings entreprise</h2><p>Régis par le devis accepté.</p>
+<h2>Délai</h2><p>Polar rembourse sur le moyen de paiement d’origine. Le délai dépend de votre banque, généralement 5 à 10 jours ouvrés.</p>`,
+cookies:`<h2>Ce que nous stockons dans votre navigateur</h2><ul><li><b>Essentiels :</b> la session de votre compte (Firebase) et vos préférences de langue et de thème.</li><li><b>Fonctionnels :</b> les idées enregistrées dans le radar, qui restent sur votre appareil.</li></ul>
+<h2>Ce que nous n’utilisons pas</h2><p>Aucun cookie publicitaire ni de suivi intersites.</p>
+<h2>Tiers</h2><p>En payant sur Polar, en vous connectant avec Google ou en réservant sur Cal.com, ces services peuvent utiliser leurs propres cookies selon leurs politiques.</p>
+<h2>Les supprimer</h2><p>Supprimez-les dans les paramètres du navigateur ; cela vous déconnecte.</p>`}
+};
+let lang="es";
+function safeHash(h){try{if(location.hash!==h)history.replaceState(null,"",h)}catch(e){}}
+function render(){
+  const d=D[lang];let id=location.hash.replace("#","").split("-")[0];if(!IDS.includes(id))id="terminos";
+  document.documentElement.lang=lang;document.title="orbe · "+d.names[IDS.indexOf(id)];
+  document.getElementById("side").innerHTML=IDS.map((k,i)=>`<a href="#${k}" aria-current="${k===id}">${d.names[i]}</a>`).join("")+`<a href="index.html">← ${d.back}</a>`;
+  document.getElementById("doc").innerHTML=`<h1>${d.names[IDS.indexOf(id)]}</h1><div class="meta">${d.upd}: ${UPD} · ${CO}</div>${d[id]}<p class="note">${d.note}</p>`;
+  document.querySelectorAll(".seg button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.l===lang));
+  document.getElementById("foot").textContent=`© 2026 ${CO} · ${MAIL}`;
+}
+document.querySelectorAll(".seg button").forEach(b=>b.onclick=()=>{lang=b.dataset.l;try{localStorage.setItem("orbe-lang",lang)}catch(e){}render()});
+window.addEventListener("hashchange",()=>{render();scrollTo(0,0)});
+try{const s=localStorage.getItem("orbe-lang");if(D[s])lang=s;else{const n=(navigator.language||"es").slice(0,2);if(D[n])lang=n}}catch(e){}
+render();
+</script>
+</body>
+</html>
